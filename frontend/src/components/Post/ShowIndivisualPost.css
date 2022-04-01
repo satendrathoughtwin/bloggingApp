@@ -1,0 +1,54 @@
+.mainSection {
+  width: 100% - 300px;
+  height: 250px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: rgb(45, 141, 109);
+  border-radius: 10px;
+  margin-right: 150px;
+  margin-left: 150px;
+  display: flex;
+  cursor: pointer;
+}
+
+img {
+  margin: 25px;
+  margin-right: 25px;
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+}
+
+.contentDiv {
+  width: 100%;
+  height: 200px;
+  margin: 25px;
+  background-color: rgb(5, 66, 44);
+  border-radius: 10px;
+}
+
+.headerDiv {
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+  padding: 10px;
+}
+
+.contentDivSection {
+  height: 30%;
+  margin-left: 10px;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+button {
+  width: 20%;
+  padding: 10px;
+  background-color: rgb(130, 130, 245);
+  border: none;
+  outline: none;
+  margin-left: 20px;
+  border-radius: 10px;
+}

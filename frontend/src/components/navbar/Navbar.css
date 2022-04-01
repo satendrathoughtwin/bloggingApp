@@ -1,0 +1,22 @@
+.navbar{
+    display: flex;
+    justify-content: center;
+    color: red;
+}
+
+.navbar a {
+    display:inline-block;
+    margin: 1ch;
+    padding: 1% 3%;
+    background-color: aquamarine;
+   
+    /* border: 1px solid red; */
+    border-radius: 10px;
+    text-decoration: none;
+   
+
+}
+.navbar a :hover{
+    cursor: pointer;
+   
+}
