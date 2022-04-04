@@ -1,14 +1,21 @@
-
 import React, { useEffect, useState } from "react";
 import BlogProfile from "../../components/blogProfile/BlogProfile";
-import { deletePostById, getAllPosts } from "../../services/api";
+import {
+  deletePostById,
+  getAllpostsOfIndivisualUser,
+} from "../../services/api";
 import swal from "sweetalert";
 
 import "./UserProfile.css";
 const UserProfilePage = () => {
   const [allPostData, setALlPostData] = useState([]);
+
   const allPost = async () => {
-    const result = await getAllPosts();
+    const locatStorageData = await localStorage.getItem("loginUserData");
+    const localStorageObjectData = await JSON.parse(locatStorageData);
+    const result = await getAllpostsOfIndivisualUser(
+      localStorageObjectData.email
+    );
     if (result) {
       setALlPostData(result);
     }
@@ -16,8 +23,6 @@ const UserProfilePage = () => {
   useEffect(() => {
     allPost();
   }, []);
-
-  
 
   const deleteBlog = async (postId) => {
     const result = await deletePostById(postId);

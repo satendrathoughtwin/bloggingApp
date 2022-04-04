@@ -4,6 +4,7 @@ const date_Time = moment().format("MMMM Do YYYY, h:mm:ss a");
 
 const blogSchema = new mongoose.Schema(
   {
+    userEmail : String,
     title: String,
     description: String,
     imgUrl: String,

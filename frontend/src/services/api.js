@@ -1,6 +1,6 @@
 import axios from "axios";
 const createPost = async (body) => {
-  console.log("datattttta ----------->body")
+  console.log("datattttta ----------->body");
   try {
     const result = await axios.post(`http://localhost:8000/api/blog`, body);
     if (result) {
@@ -12,8 +12,7 @@ const createPost = async (body) => {
 };
 
 const getPostById = async (postId) => {
-
-  console.log("Post id is comming", postId)
+  console.log("Post id is comming", postId);
   try {
     const result = await axios.get(`http://localhost:8000/api/blog/${postId}`);
     if (result) {
@@ -27,7 +26,7 @@ const getPostById = async (postId) => {
 
 const getAllPosts = async () => {
   try {
-    const result = await axios.get(`http://localhost:8000/api/blog`);
+    const result = await axios.get(`/api/blog`);
     if (result) {
       return result.data.data;
     }
@@ -39,7 +38,8 @@ const getAllPosts = async () => {
 const updatePostById = async (postId, body) => {
   try {
     const result = await axios.patch(
-      `http://localhost:8000/api/blog/${postId}`, body
+      `http://localhost:8000/api/blog/${postId}`,
+      body
     );
     if (result) {
       return result.data.data;
@@ -60,4 +60,47 @@ const deletePostById = async (postId) => {
     console.log("blog/post deletion is failed", err.message);
   }
 };
-export { createPost, getPostById, getAllPosts, updatePostById, deletePostById };
+
+const register = async (body) => {
+  try {
+    const result = await axios.post(`/api/user/userRegister`, body);
+    if (result) {
+      return result.data;
+    }
+  } catch (err) {
+    console.log(`user Register Error : `, err.message);
+  }
+};
+
+const login = async (body) => {
+  try {
+    const result = await axios.post(`/api/user/userLogin`, body);
+    if (result) {
+      return result.data;
+    }
+  } catch (err) {
+    console.log(`user Login Error : `, err.message);
+  }
+};
+
+const getAllpostsOfIndivisualUser = async (userEmail) => {
+  try {
+    console.log("userEmail", userEmail)
+    const result = await axios.get(`/api/userblog/${userEmail}`);
+    if (result) {
+      return result.data.data;
+    }
+  } catch (err) {
+    console.log(`get All Posts of indivisual user: `, err.message);
+  }
+};
+export {
+  createPost,
+  getPostById,
+  getAllPosts,
+  updatePostById,
+  deletePostById,
+  register,
+  login,
+  getAllpostsOfIndivisualUser
+};

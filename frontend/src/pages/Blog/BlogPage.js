@@ -16,7 +16,14 @@ const BlogPage = () => {
   const { blogId } = useParams();
 
   const updateBlog = async (postId) => {
-    const body = { title, description, imgUrl };
+    const locatStorageData = await localStorage.getItem("loginUserData");
+    const localStorageObjectData = await JSON.parse(locatStorageData);
+    const body = {
+      title,
+      description,
+      imgUrl,
+      userEmail: localStorageObjectData.email,
+    };
     const result = await updatePostById(postId, body);
     if (result) {
       swal("Good job!", "Post has updated!", "success");
@@ -29,7 +36,14 @@ const BlogPage = () => {
       updateBlog(blogId);
     } else {
       if (imgUrl) {
-        const body = { title, description, imgUrl };
+        const locatStorageData = await localStorage.getItem("loginUserData");
+        const localStorageObjectData = await JSON.parse(locatStorageData);
+        const body = {
+          title,
+          description,
+          imgUrl,
+          userEmail: localStorageObjectData.email,
+        };
         const data = await createPost(body);
         if (data) {
           alert("blog has uploaded");
@@ -43,11 +57,11 @@ const BlogPage = () => {
   const getBlogById = async () => {
     const result = await getPostById(blogId);
     if (result) {
-    result.map(data=>{
-      setTitle(data.title)
-      setDescription(data.description)
-      setImgUrl(data.imgUrl)
-    })
+      result.map((data) => {
+        setTitle(data.title);
+        setDescription(data.description);
+        setImgUrl(data.imgUrl);
+      });
     }
   };
   useEffect(() => {
@@ -83,17 +97,16 @@ const BlogPage = () => {
     uploadFile(file);
   };
 
-  useEffect(()=>{
-    getBlogById()
-  },[])
+  useEffect(() => {
+    getBlogById();
+  }, []);
 
   return (
     <section className=" blogPage">
       <header>{blogId ? "Update Blog" : "Crete Blog"}</header>
       <form onSubmit={formHandler}>
-      {imgUrl ? <img src={imgUrl} alt=""/> :""}
+        {imgUrl ? <img src={imgUrl} alt="" /> : ""}
         <div className="blogPageImageDiv">
-          
           <input type="file" />
 
           <button type="submit">
