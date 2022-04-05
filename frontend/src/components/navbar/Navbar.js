@@ -1,15 +1,32 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 const Navbar = () => {
+  const navigate = useNavigate();
+  const locatStorageData = localStorage.getItem("loginUserData");
+  const localStorageObjectData = JSON.parse(locatStorageData);
+  const logoutUser = () => {
+    localStorage.removeItem("loginUserData");
+    localStorage.removeItem("loginUserToken");
+    navigate("/login")
+  };
   return (
     <div>
       <nav className="navbar">
         <NavLink to="/">Home</NavLink>
         <NavLink to="/blog">Blog</NavLink>
-        <NavLink to="/userProfile">Profile</NavLink>
-        <NavLink to="/login">Login</NavLink>
-        <NavLink to="/register">Register</NavLink>
+
+        {localStorageObjectData ? (
+          <>
+            <NavLink to="/userProfile">{localStorageObjectData.name}</NavLink>
+            <button onClick={() => logoutUser()}>logout</button>
+          </>
+        ) : (
+          <>
+            <NavLink to="/login">Login</NavLink>
+            <NavLink to="/register">Register</NavLink>
+          </>
+        )}
       </nav>
     </div>
   );

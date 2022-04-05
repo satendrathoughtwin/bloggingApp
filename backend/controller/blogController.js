@@ -84,11 +84,9 @@ const getBlogById = async (req, res) => {
 };
 
 const getBlogByUserEmail = async (req, res) => {
-  console.log("userEmail ::----->",req.params.userEmail)
   try {
     const result = await BlogModel.find({ userEmail: req.params.userEmail });
     if (result.length > 0) {
-      console.log(result)
       res.status(200).json({
         status: "success",
         statusCode: 200,
@@ -137,7 +135,6 @@ const deleteBlog = async (req, res) => {
 };
 
 const updateBlog = async (req, res) => {
-  console.log("req.body", req.body);
   try {
     const result = await BlogModel.findByIdAndUpdate(
       { _id: req.params.Id },

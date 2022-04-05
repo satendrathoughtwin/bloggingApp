@@ -13,8 +13,8 @@ const ShowIndivisulaPost = ({ data, key }) => {
         </div>
         <div className="contentDiv">
           <div className="headerDiv">
-            <h1>User Name</h1>
-            <h3>{data.date_Time}</h3>
+            <strong>{data.title}</strong>
+            <strong>{data.date_Time}</strong>
           </div>
           <section className="contentDivSection">
             <span dangerouslySetInnerHTML={{ __html: data.description }} />

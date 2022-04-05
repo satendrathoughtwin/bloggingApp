@@ -1,6 +1,73 @@
-.userProfilePage{
-    width: 100%-300px;
-    border-radius: 10px;
-    background-color: aquamarine;
-    margin: 10px 150px;
+.userProfilePage {
+  width: 100%-300px;
+  border-radius: 10px;
+  margin: 10px 150px;
+}
+
+.userProfile_Section {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background-color: rgb(56, 155, 122);
+  border-radius: 10px;
+}
+
+.userProfile_Section_figure {
+  height: 400px;
+  width: 40%;
+  border-radius: 10px;
+  margin: 40px;
+  background-color: rgb(5, 66, 44);
+  justify-content: center;
+  text-align: center;
+}
+
+.userProfile_Section_figure img {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+}
+
+.userProfile_Section_Aside {
+  height: 400px;
+  width: 40%;
+  border-radius: 10px;
+  margin: 40px;
+  background-color: rgb(5, 66, 44);
+  color: rgb(179, 192, 204);
+}
+
+.userProfile_Section_Content {
+  display: flex;
+  background-color: rgb(41, 107, 85);
+  margin-bottom: 5px;
+  border-radius: 10px;
+}
+
+.userProfile_Section_Content :hover {
+  background-color: rgb(41, 107, 85);
+}
+.userProfile_Section_Content :nth-child(1) {
+  padding: 40px 20px 40px 20px;
+  width: 20%;
+}
+
+.userProfile_Section_Content :nth-child(2) {
+  padding: 40px 5px 40px 5px;
+}
+
+
+
+.userProfile_Section_figure a {
+  display: inline-block;
+  margin: 1ch;
+  padding: 1% 3%;
+  /* background-color: aquamarine; */
+
+  /* border: 1px solid red; */
+  border-radius: 10px;
+  text-decoration: none;
+}
+.userProfile_Section_figure a :hover {
+  cursor: pointer;
 }

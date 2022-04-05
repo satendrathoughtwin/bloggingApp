@@ -31,16 +31,20 @@ img {
   display: flex;
   justify-content: space-between;
   color: #fff;
-  padding: 10px;
+  padding: 10px 10px 2px 10px;
+}
+
+.headerDiv :nth-child(2) {
+  font-size: 12px;
 }
 
 .contentDivSection {
-  height: 30%;
-  margin-left: 10px;
-
+  height: 127px;
+  margin: 2px 10px 0px 10px;
+  max-width: 100%;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  color: rgb(221, 206, 206);
+  font-size: 16px;
 }
 
 button {
@@ -50,5 +54,6 @@ button {
   border: none;
   outline: none;
   margin-left: 20px;
+  margin-top: 2px;
   border-radius: 10px;
 }

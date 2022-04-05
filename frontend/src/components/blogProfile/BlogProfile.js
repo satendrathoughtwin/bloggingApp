@@ -8,8 +8,8 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
   return (
     <div className="BlogProfile">
       <div className="blogProfileHeaderDiv">
-        <h1>Creator Name</h1>
-        <h3>{BlogData.date_Time}</h3>
+        <h3>{BlogData.userEmail}</h3>
+        <h5>{BlogData.date_Time}</h5>
       </div>
 
       <div className="blogProfile_Title_Button_Div">

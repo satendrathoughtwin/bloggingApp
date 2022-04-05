@@ -4,7 +4,7 @@ import swal from "sweetalert";
 import { register } from "../../services/api";
 import "./Auth.css";
 const RegisterPage = () => {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
   const [userDetail, setUserDetail] = useState({
     name: "",
     email: "",
@@ -19,27 +19,22 @@ const RegisterPage = () => {
       };
     });
   };
-  const registerUser = async(e) => {
+  const registerUser = async (e) => {
     e.preventDefault();
-    const result = await register(userDetail)
-    if(result.error)
-    {
+    const result = await register(userDetail);
+    if (result.error) {
       swal("Error", result.error, "error");
-      return
+      return;
     }
-    if(result.userExist)
-    {
-        swal("Exist", "user already exist with these credentials", "warning");
-        return
+    if (result.userExist) {
+      swal("Exist", "user already exist with these credentials", "warning");
+      return;
     }
-    if(result)
-    {
-        swal("Successfully", "user register successfully", "success");
-        setUserDetail({})
-        navigate("/login")
-
+    if (result) {
+      swal("Successfully", "user register successfully", "success");
+      setUserDetail({});
+      navigate("/login");
     }
-    
   };
 
   return (
@@ -54,6 +49,7 @@ const RegisterPage = () => {
             name="name"
             placeholder="Type Name ..."
             autocomplete="off"
+            minlength="5"
           />
         </div>
         <div>
@@ -65,20 +61,21 @@ const RegisterPage = () => {
             name="email"
             placeholder="Type Email ... *"
             required
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
             autocomplete="off"
           />
         </div>
-        
+
         <div>
           <label>Password</label>
           <input
             type="password"
             value={userDetail.password}
             onChange={inputEvent}
-            placeholder = "Type Password ... *"
+            placeholder="Type Password ... *"
             name="password"
+            minlength="5"
             required
-
             autocomplete="off"
           />
         </div>
@@ -88,7 +85,7 @@ const RegisterPage = () => {
         </div>
       </form>
       <div>
-          <NavLink to ="/login">Already exist, Login ! </NavLink>
+        <NavLink to="/login">Already exist, Login ! </NavLink>
       </div>
     </section>
   );

@@ -8,6 +8,7 @@ import HomePage from "./pages/Home/HomePage";
 import IndivisualBlogPage from "./pages/indivisulaBlog/IndivisualBlogPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import LoginPage from "./pages/auth/LoginPage";
+import UpdateUser from "./pages/updateUser/UpdateUser";
 const App = () => {
   return (
     <>
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/blog/:blogId" element={<BlogPage />} />
           <Route path="/indivisualblog/:blogId" element={<IndivisualBlogPage />} />
           <Route path="/userProfile" element={<UserProfilePage />} />
+          <Route path="/userUpdate/:userId" element={<UpdateUser />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
         </Routes>

@@ -6,14 +6,16 @@ import { storage } from "../../services/firebase";
 
 import swal from "sweetalert";
 import "./BlogPage.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 const BlogPage = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [progress, setProgress] = useState(0);
+  const [token, setToken] = useState("");
   const [imgUrl, setImgUrl] = useState("");
   const [buttonClick, setButtonClick] = useState(false);
   const { blogId } = useParams();
+  const navigate = useNavigate();
 
   const updateBlog = async (postId) => {
     const locatStorageData = await localStorage.getItem("loginUserData");
@@ -26,7 +28,17 @@ const BlogPage = () => {
     };
     const result = await updatePostById(postId, body);
     if (result) {
-      swal("Good job!", "Post has updated!", "success");
+      swal({
+        title: "Post has updated!",
+        text: "Go On Your Profile",
+        icon: "info",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          navigate("/userProfile");
+        }
+      });
     }
   };
 
@@ -46,10 +58,11 @@ const BlogPage = () => {
         };
         const data = await createPost(body);
         if (data) {
-          alert("blog has uploaded");
+          swal("Good job!", "blog has created!", "success");
+          navigate("/userProfile");
         }
       } else {
-        alert("upload image first");
+        swal("Good job!", "upload image first!", "success");
       }
     }
   };
@@ -64,6 +77,13 @@ const BlogPage = () => {
       });
     }
   };
+
+  const findToken = async () => {
+    const locatStorageData = await localStorage.getItem("loginUserToken");
+    const localStorageObjectToken = await JSON.parse(locatStorageData);
+    setToken(localStorageObjectToken);
+  };
+
   useEffect(() => {
     getBlogById();
   }, []);
@@ -99,46 +119,56 @@ const BlogPage = () => {
 
   useEffect(() => {
     getBlogById();
+    findToken();
   }, []);
 
   return (
     <section className=" blogPage">
-      <header>{blogId ? "Update Blog" : "Crete Blog"}</header>
-      <form onSubmit={formHandler}>
-        {imgUrl ? <img src={imgUrl} alt="" /> : ""}
-        <div className="blogPageImageDiv">
-          <input type="file" />
+      {token ? (
+        <>
+          <header>{blogId ? "Update Blog" : "Create Blog"}</header>
+          <form onSubmit={formHandler}>
+            {imgUrl ? <img src={imgUrl} alt="" /> : ""}
+            <div className="blogPageImageDiv">
+              <input type="file" />
 
-          <button type="submit">
-            {buttonClick ? `Uploading ${progress} %` : "Upload *"}
-          </button>
-        </div>
-      </form>
+              <button type="submit">
+                {buttonClick ? `Uploading ${progress} %` : "Upload *"}
+              </button>
+            </div>
+          </form>
 
-      <form onSubmit={savePost}>
-        <div className="blogPageInputDiv ">
-          <label>Title</label> <br></br>
-          <input
-            type="text"
-            placeholder="Type Title Here..."
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
+          <form onSubmit={savePost}>
+            <div className="blogPageInputDiv ">
+              <label>Title</label> <br></br>
+              <input
+                type="text"
+                placeholder="Type Title Here..."
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
 
-        <div className="descriptionDiv">
-          <label>Description</label>
-          <RichEditor
-            setDescription={setDescription}
-            description={description}
-          />
-        </div>
+            <div className="descriptionDiv">
+              <label>Description</label>
+              <RichEditor
+                setDescription={setDescription}
+                description={description}
+              />
+            </div>
 
-        <div className="BlogPagebuttonDiv">
-          <button type="submit">Post</button>
-          <button type="cancel">Cancel</button>
+            <div className="BlogPagebuttonDiv">
+              <button type="submit">Post</button>
+              <button type="cancel">Cancel</button>
+            </div>
+          </form>
+        </>
+      ) : (
+        <div className="blogPage_NotLoggedInDiv">
+          <header>Not LoggedIn ! login first</header>
+          <button  onClick={() => navigate("/login")}>Login</button>
         </div>
-      </form>
+      )}
     </section>
   );
 };

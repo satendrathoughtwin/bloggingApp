@@ -101,4 +101,64 @@ const signInUser = async (req, res) => {
   }
 };
 
-export { registerUser, signInUser };
+
+const updateUser = async (req, res) => {
+  try {
+    const result = await User.findByIdAndUpdate(
+      { _id: req.params.userId },
+      req.body,
+      {
+        new: true,
+      }
+    );
+    if (result) {
+      res.status(200).json({
+        status: "success",
+        statusCode: 200,
+        message: "user updated successfully",
+        data: result,
+      });
+    }
+  } catch (err) {
+    console.log(chalk.redBright(err.message));
+    res.status(400).json({
+      status: "fail",
+      statusCode: 400,
+      message: err.message,
+    });
+  }
+};
+
+
+const getUserById = async (req, res) => {
+  console.log(req.params.userId)
+  try {
+    const result = await User.find({ _id: req.params.userId });
+    if (result.length > 0) {
+      res.status(200).json({
+        status: "success",
+        statusCode: 200,
+        message: " user found Successfully",
+        listlength: result.length,
+        data: result,
+      });
+    } else {
+      res.status(200).json({
+        status: "success",
+        statusCode: 200,
+        message: "user is not found",
+        listlength: result.length,
+        data: result,
+      });
+    }
+  } catch (err) {
+    console.log(chalk.redBright(err.message));
+    res.status(400).json({
+      status: "fail",
+      statusCode: 400,
+      message: err.message,
+    });
+  }
+};
+
+export { registerUser, signInUser, updateUser,getUserById };

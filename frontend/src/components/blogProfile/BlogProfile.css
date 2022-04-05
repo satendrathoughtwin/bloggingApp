@@ -1,5 +1,8 @@
 .BlogProfile {
   padding-bottom: 1%;
+  background-color: rgb(56, 155, 122);
+  margin: 10px 0px;
+  border-radius: 10px;
 }
 h2 {
   margin-left: 5%;
@@ -14,7 +17,8 @@ h2 {
 .blogProfileHeaderDiv {
   display: flex;
   justify-content: space-between;
-  margin: 0px 10px;
+  margin: 0px 50px;
+  color: #fff;
 }
 
 .BlogProfileImgDiv img {

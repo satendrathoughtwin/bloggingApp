@@ -34,7 +34,7 @@ const LoginPage = () => {
       localStorage.setItem("loginUserData", JSON.stringify(newResult));
       localStorage.setItem("loginUserToken", JSON.stringify(newToken));
       setUserDetail({});
-      navigate("/");
+      navigate("/userProfile");
     }
   };
 
@@ -49,6 +49,7 @@ const LoginPage = () => {
             onChange={inputEvent}
             name="email"
             placeholder="Type Email ... *"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
             required
             autocomplete="off"
           />
@@ -61,6 +62,7 @@ const LoginPage = () => {
             onChange={inputEvent}
             placeholder="Type Password ... *"
             name="password"
+            minlength="5"
             required
             autocomplete="off"
           />

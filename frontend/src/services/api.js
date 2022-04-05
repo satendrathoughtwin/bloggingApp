@@ -85,13 +85,36 @@ const login = async (body) => {
 
 const getAllpostsOfIndivisualUser = async (userEmail) => {
   try {
-    console.log("userEmail", userEmail)
+    console.log("userEmail", userEmail);
     const result = await axios.get(`/api/userblog/${userEmail}`);
     if (result) {
       return result.data.data;
     }
   } catch (err) {
     console.log(`get All Posts of indivisual user: `, err.message);
+  }
+};
+
+const updateUserById = async (userId, body) => {
+  try {
+    const result = await axios.patch(`/api/user/userUpdate/${userId}`, body);
+    if (result) {
+      return result.data.data;
+    }
+  } catch (err) {
+    console.log("user updation is failed", err.message);
+  }
+};
+
+
+const getUserById = async (userId) => {
+  try {
+    const result = await axios.get(`/api/user/userfind/${userId}`);
+    if (result) {
+      return result.data.data;
+    }
+  } catch (err) {
+    console.log("user find is failed", err.message);
   }
 };
 export {
@@ -102,5 +125,7 @@ export {
   deletePostById,
   register,
   login,
-  getAllpostsOfIndivisualUser
+  getAllpostsOfIndivisualUser,
+  updateUserById,
+  getUserById
 };

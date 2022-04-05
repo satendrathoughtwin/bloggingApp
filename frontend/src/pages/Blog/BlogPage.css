@@ -78,3 +78,7 @@
 button {
     cursor: pointer;
 }
+
+.blogPage_NotLoggedInDiv{
+    text-align: center;
+}
