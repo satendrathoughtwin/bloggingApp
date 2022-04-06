@@ -6,8 +6,9 @@ const time = moment().format("hh:mm:ss a");
 const userSchema = new mongoose.Schema(
   {
     name: String,
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique  :true },
     password: String,
+    number : {type : Number, unique : true },
     profession : {type : String, default : "Blogger"},
     imgUrl: {
       type: String,

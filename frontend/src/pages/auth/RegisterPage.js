@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import { register } from "../../services/api";
@@ -8,6 +8,7 @@ const RegisterPage = () => {
   const [userDetail, setUserDetail] = useState({
     name: "",
     email: "",
+    number : "",
     password: "",
   });
   const inputEvent = async (e) => {
@@ -39,6 +40,7 @@ const RegisterPage = () => {
 
   return (
     <section className="authSection">
+       <header>Register</header>
       <form onSubmit={registerUser}>
         <div>
           <label>Name</label>
@@ -62,6 +64,17 @@ const RegisterPage = () => {
             placeholder="Type Email ... *"
             required
             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+            autocomplete="off"
+          />
+        </div>
+        <div>
+          <label>Number</label>
+          <input
+            type="tel"
+            value={userDetail.number}
+            onChange={inputEvent}
+            name="number"
+            placeholder="Type Number ... *"
             autocomplete="off"
           />
         </div>

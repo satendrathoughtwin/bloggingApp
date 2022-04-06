@@ -9,6 +9,7 @@ import IndivisualBlogPage from "./pages/indivisulaBlog/IndivisualBlogPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import LoginPage from "./pages/auth/LoginPage";
 import UpdateUser from "./pages/updateUser/UpdateUser";
+import ForgetPasswordPage from "./pages/auth/ForgetPassword";
 const App = () => {
   return (
     <>
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/userUpdate/:userId" element={<UpdateUser />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/forgetPassword" element={<ForgetPasswordPage />} />
         </Routes>
       </BrowserRouter>
     </>

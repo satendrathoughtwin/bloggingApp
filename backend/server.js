@@ -4,7 +4,6 @@ import connectDb from "./utils/dbConn.js";
 import blogRouter from "./routers/blogRoute.js";
 import authRouter from "./routers/authRouter.js";
 import cors from "cors";
-import sendEmail from "./utils/email.js";
 const app = express();
 const port = process.env.PORT || 8000;
 connectDb();
@@ -21,7 +20,6 @@ app.get("/", (req, res) => {
 app.use("/api", blogRouter);
 app.use("/api/user", authRouter);
 
-// sendEmail()
 // https://www.youtube.com/watch?v=wh29G3vMsL4
 
 app.listen(port, console.log(`app is running at port : ${port}`));

@@ -106,7 +106,6 @@ const updateUserById = async (userId, body) => {
   }
 };
 
-
 const getUserById = async (userId) => {
   try {
     const result = await axios.get(`/api/user/userfind/${userId}`);
@@ -115,6 +114,52 @@ const getUserById = async (userId) => {
     }
   } catch (err) {
     console.log("user find is failed", err.message);
+  }
+};
+
+const email_Number_Varification = async (body) => {
+  let payload ={emailNumberVarification : "", type : ""};
+  const {email,number} = body;
+  if(email)
+  {
+    payload.emailNumberVarification = email
+    payload.type = "just for logic"
+  }
+  else{
+    payload.emailNumberVarification = number
+    payload.type = 1234567890
+  }
+  try {
+    const result = await axios.patch(`/api/user/email_Number_Varification`,payload);
+    if (result) {
+      return result.data
+    }
+  } catch (err) {
+    console.log("Email Send failed", err.message);
+  }
+};
+
+const OTPVarification = async (body) => {
+  console.log("OTPVarification", body);
+  try {
+    const result = await axios.patch(`/api/user/verify_Verification_Code`,body);
+    if (result) {
+      return result.data;
+    }
+  } catch (err) {
+    console.log("Email Send failed", err.message);
+  }
+};
+
+const changePassword = async (body) => {
+  console.log("ForgetPasswordVarification", body);
+  try {
+    const result = await axios.patch(`/api/user/forgetPassword`,body);
+    if (result) {
+      return result.data;
+    }
+  } catch (err) {
+    console.log("Email Send failed", err.message);
   }
 };
 export {
@@ -127,5 +172,8 @@ export {
   login,
   getAllpostsOfIndivisualUser,
   updateUserById,
-  getUserById
+  getUserById,
+  email_Number_Varification,
+  OTPVarification,
+  changePassword
 };

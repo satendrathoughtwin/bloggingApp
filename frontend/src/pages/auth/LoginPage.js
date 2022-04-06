@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
-import { login, register } from "../../services/api";
+import { login} from "../../services/api";
 import "./Auth.css";
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -27,8 +27,8 @@ const LoginPage = () => {
     }
 
     if (result) {
-    const newResult = result.data.result.result;
-    const newToken = result.data.result.token;
+      const newResult = result.data.result.result;
+      const newToken = result.data.result.token;
 
       swal("Successfully", "user login successfully", "success");
       localStorage.setItem("loginUserData", JSON.stringify(newResult));
@@ -40,6 +40,7 @@ const LoginPage = () => {
 
   return (
     <section className="authSection">
+      <header>Login</header>
       <form onSubmit={loginUser}>
         <div>
           <label>Email</label>
@@ -74,6 +75,7 @@ const LoginPage = () => {
       </form>
       <div>
         <NavLink to="/register">Not Registered, Register ! </NavLink>
+        <NavLink to="/forgetPassword">Forget, Password ? </NavLink>
       </div>
     </section>
   );

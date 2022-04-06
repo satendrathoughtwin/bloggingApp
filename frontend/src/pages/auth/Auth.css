@@ -38,3 +38,21 @@
 .authSection a:hover {
   color: rgb(150, 150, 233);
 }
+
+.authSection header {
+  display: block;
+  text-align: center;
+  font-size: 25px;
+  margin-bottom: 20px;
+  color: aquamarine;
+  
+}
+
+.authSection_confirmationDiv {
+  margin-bottom: 50px;
+}
+.authSection_confirmationDiv button{
+  background-color: rgb(124, 221, 187) !important;
+  color: #000;
+
+} 

@@ -1,7 +1,12 @@
 import chalk from "chalk";
 import nodemailer from "nodemailer";
 
-const sendEmail = async (subject = "", text = "", html = "") => {
+const sendEmail = async (
+  subject = "",
+  // text = "",
+  html = "",
+  RECEIVER_EMAIL
+) => {
   var transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -12,19 +17,21 @@ const sendEmail = async (subject = "", text = "", html = "") => {
 
   var mailOptions = {
     from: process.env.SENDER_EMAIL,
-    to: process.env.RECEIVER_EMAIL,
+    to: RECEIVER_EMAIL,
     subject,
-    text,
+    // text,
     html,
   };
-
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(chalk.redBright(error.message));
+  try {
+    const result = await transporter.sendMail(mailOptions);
+    if (result) {
+      return true;
     } else {
-      console.log(chalk.greenBright("Email sent: " + info.response));
+      return false;
     }
-  });
+  } catch (err) {
+    return false;
+  }
 };
 
 export default sendEmail;

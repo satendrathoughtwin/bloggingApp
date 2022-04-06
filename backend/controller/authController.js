@@ -2,14 +2,18 @@ import chalk from "chalk";
 import { User } from "../model/authModel.js";
 import generatetoken from "../utils/generateWebToken.js";
 import bcrypt from "bcrypt";
+import sendEmail from "../utils/email.js";
+import sendMessage from "../utils/message.js";
+let varificationCode = Math.floor(Math.random() * 1000000 + 1);
 
 const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, number } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
   const userData = new User({
     name,
     email,
     password: hashedPassword,
+    number,
   });
 
   try {
@@ -18,7 +22,7 @@ const registerUser = async (req, res) => {
       res.status(200).json({
         status: "success",
         statusCode: 200,
-        userExist : true,
+        userExist: true,
         message: "User is already exist",
         data: userIsExist,
       });
@@ -48,59 +52,46 @@ const registerUser = async (req, res) => {
 const signInUser = async (req, res) => {
   const { email, password } = req.body;
 
-  try{
-
-
-    let result = await User.findOne({ email })
-    if(!result)
-    {
-      console.log("invalid credentials")
+  try {
+    let result = await User.findOne({ email });
+    if (!result) {
       res.status(200).json({
-        status : "fail",
-        statusCode : 200,
-        wrongCredential : true,
-        message :"user not exist / invalid credentials"
-      })
-      return
+        status: "fail",
+        statusCode: 200,
+        wrongCredential: true,
+        message: "user not exist / invalid credentials",
+      });
+      return;
     }
     const match = await bcrypt.compare(password, result.password);
-    if(!match){
-      console.log("invalid credentials")
+    if (!match) {
       res.status(200).json({
-        status : "fail",
-        statusCode : 200,
-        wrongCredential : true,
-        message :"invalid credentials"
-      })
-      return
-    }
-    else{
-      const token = await generatetoken(result._id,email)
-      result  = {result, token}
-      console.log(result)
-  
-      res.status(200).json({
-        status : "success",
-        statusCode : 200,
-        length : result.length,
-        message :"user loggedIn",
-        data : {result}
-      })
-    }
-  
-  }
-   
-   catch (err) {
-    console.log(chalk.redBright(err))
-    res.status(400).json({
         status: "fail",
-        statusCode: 400,
-        Error :  err.message, 
-     
-      })
+        statusCode: 200,
+        wrongCredential: true,
+        message: "invalid credentials",
+      });
+      return;
+    } else {
+      const token = await generatetoken(result._id, email);
+      result = { result, token };
+      res.status(200).json({
+        status: "success",
+        statusCode: 200,
+        length: result.length,
+        message: "user loggedIn",
+        data: { result },
+      });
+    }
+  } catch (err) {
+    console.log(chalk.redBright(err));
+    res.status(400).json({
+      status: "fail",
+      statusCode: 400,
+      Error: err.message,
+    });
   }
 };
-
 
 const updateUser = async (req, res) => {
   try {
@@ -129,9 +120,7 @@ const updateUser = async (req, res) => {
   }
 };
 
-
 const getUserById = async (req, res) => {
-  console.log(req.params.userId)
   try {
     const result = await User.find({ _id: req.params.userId });
     if (result.length > 0) {
@@ -160,5 +149,115 @@ const getUserById = async (req, res) => {
     });
   }
 };
+const email_Number_Varification = async (req, res) => {
+  const { emailNumberVarification, type } = req.body;
+  const subject = "Verification Code Of Forget Password For Blog App ";
+  const html = `<p>You have forgot your login Password, So you are trying to generate new Password</p><h4> You varification code is :</h4> <h1>${varificationCode}</h1>`;
+  const msg = `You have forgot your login Password, So you are trying to generate new Password,
+  You varification code is : ${varificationCode}`;
+  try {
+    let messageResult;
+    let emailResult;
+    if (typeof type === "string") {
+      const findEmailInDb = await User.findOne({
+        email: emailNumberVarification,
+      });
+      if (findEmailInDb)
+        emailResult = await sendEmail(
+          subject,
+          html,
+          process.env.RECEIVER_EMAIL
+        );
+    } else if (typeof type === "number") {
+      const findNumberInDb = await User.findOne({
+        number: emailNumberVarification,
+      });
+      if (findNumberInDb)
+        messageResult = await sendMessage(msg, process.env.RECEIVER_MOBILE_NO);
+    }
 
-export { registerUser, signInUser, updateUser,getUserById };
+    if ((messageResult && emailResult) || messageResult || emailResult) {
+      res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: `varification code has sent on your registered mobile ${process.env.RECEIVER_MOBILE_NO} and Email ${process.env.RECEIVER_EMAIL}`,
+      });
+      return;
+    } else {
+      res.status(204).json({
+        status: true,
+        statusCode: 204,
+        message: `Mobile and Email has not found`,
+      });
+      return;
+    }
+  } catch (err) {
+    res.status(400).json({
+      status: true,
+      statusCode: 400,
+      message: err.message,
+    });
+    return;
+  }
+};
+
+const verify_Verification_Code = async (req, res) => {
+  const { otp } = req.body;
+ 
+  if (otp !== varificationCode) {
+    res.status(200).json({
+      status: false,
+      statusCode: 200,
+      changePasswordPermission: false,
+      message: "Wrong Verification code",
+    });
+    return;
+  } else {
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      changePasswordPermission: true,
+      message: "Code Verification is successfull",
+    });
+    return;
+  }
+};
+
+const forgetPassword = async (req, res) => {
+  const { userId, password } = req.body;
+  try {
+
+    /// need to send data conditionally based on phone and email
+    const result = await User.findByIdAndUpdate(
+      { _id: userId },
+      { password },
+      {
+        new: true,
+      }
+    );
+    if (result) {
+      res.status(200).json({
+        status: "success",
+        statusCode: 200,
+        message: "user Password has updated successfully",
+        data: result,
+      });
+    }
+  } catch (err) {
+    console.log(chalk.redBright(err.message));
+    res.status(400).json({
+      status: "fail",
+      statusCode: 400,
+      message: err.message,
+    });
+  }
+};
+export {
+  registerUser,
+  signInUser,
+  updateUser,
+  getUserById,
+  forgetPassword,
+  verify_Verification_Code,
+  email_Number_Varification,
+};
