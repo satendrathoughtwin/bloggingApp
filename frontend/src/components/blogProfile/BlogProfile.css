@@ -51,6 +51,7 @@ h2 {
   width: 20%;
   display: flex;
   justify-content: space-between;
+  text-align: center;
   
 }
 .blogProfile_Button_Div button{
@@ -58,9 +59,48 @@ h2 {
   height: 30px;
   padding: 0% !important;
   margin: 0% !important;
-  color: #fff;
-  background-color: rgb(65, 42, 87);
+  color: rgb(65, 42, 87);
+  background-color: inherit;
   border: none;
   outline: none;
   border-radius: 5px;
+  font-size: 25px;
+}
+
+.BlogProfileFooter{
+  display:  flex;
+  justify-content: space-between;
+  text-align: center;
+  margin: 10px 50px;
+}
+
+.BlogProfileFooter a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.BlogProfile_Footer__Span{
+  display:  flex;
+  text-align: center;
+  
+  color: #fff;
+}
+
+.BlogProfile_Footer__Span :nth-child(1){
+  margin-right: 5px;
+  font-size: 20px;
+}
+
+.BlogProfileFooterButton{
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  margin: 20px 50px;
+  font-size: 20px;
+}
+
+.BlogProfileFooterButton button{
+  background-color: inherit !important;
+  border : 1px solid aquamarine;
+  color : #fff
 }

@@ -20,6 +20,4 @@ app.get("/", (req, res) => {
 app.use("/api", blogRouter);
 app.use("/api/user", authRouter);
 
-// https://www.youtube.com/watch?v=wh29G3vMsL4
-
 app.listen(port, console.log(`app is running at port : ${port}`));

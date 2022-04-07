@@ -149,6 +149,39 @@ const getUserById = async (req, res) => {
     });
   }
 };
+
+
+const getUserByEmail = async (req, res) => {
+  try {
+    const result = await User.find({ email: req.params.email });
+    if (result.length > 0) {
+      res.status(200).json({
+        status: "success",
+        statusCode: 200,
+        message: " user found Successfully",
+        listlength: result.length,
+        data: result,
+      });
+    } else {
+      res.status(200).json({
+        status: "success",
+        statusCode: 200,
+        message: "user is not found",
+        listlength: result.length,
+        data: result,
+      });
+    }
+  } catch (err) {
+    console.log(chalk.redBright(err.message));
+    res.status(400).json({
+      status: "fail",
+      statusCode: 400,
+      message: err.message,
+    });
+  }
+};
+
+
 const email_Number_Varification = async (req, res) => {
   const { emailNumberVarification, type } = req.body;
   const subject = "Verification Code Of Forget Password For Blog App ";
@@ -159,6 +192,7 @@ const email_Number_Varification = async (req, res) => {
     let messageResult;
     let emailResult;
     if (typeof type === "string") {
+      console.log("inside string");
       const findEmailInDb = await User.findOne({
         email: emailNumberVarification,
       });
@@ -172,8 +206,24 @@ const email_Number_Varification = async (req, res) => {
       const findNumberInDb = await User.findOne({
         number: emailNumberVarification,
       });
-      if (findNumberInDb)
+      if (findNumberInDb) {
         messageResult = await sendMessage(msg, process.env.RECEIVER_MOBILE_NO);
+        res.status(200).json({
+          status: true,
+          statusCode: 200,
+          numberFound: true,
+          message: "Number is registerd",
+        });
+        return;
+      } else {
+        res.status(203).json({
+          status: true,
+          statusCode: 203,
+          numberFound: false,
+          message: "Number is not registerd",
+        });
+        return;
+      }
     }
 
     if ((messageResult && emailResult) || messageResult || emailResult) {
@@ -203,8 +253,8 @@ const email_Number_Varification = async (req, res) => {
 
 const verify_Verification_Code = async (req, res) => {
   const { otp } = req.body;
- 
-  if (otp !== varificationCode) {
+
+  if (parseInt(otp) !== varificationCode) {
     res.status(200).json({
       status: false,
       statusCode: 200,
@@ -225,22 +275,32 @@ const verify_Verification_Code = async (req, res) => {
 
 const forgetPassword = async (req, res) => {
   const { userId, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
   try {
-
-    /// need to send data conditionally based on phone and email
-    const result = await User.findByIdAndUpdate(
-      { _id: userId },
-      { password },
-      {
-        new: true,
-      }
-    );
+    let result;
+    if (typeof userId === "string") {
+      result = await User.updateOne(
+        { email: userId },
+        { password: hashedPassword },
+        {
+          new: true,
+        }
+      );
+    }
+    if (typeof userId === "number") {
+      result = await User.updateOne(
+        { number: userId },
+        { password: hashedPassword },
+        {
+          new: true,
+        }
+      );
+    }
     if (result) {
       res.status(200).json({
         status: "success",
         statusCode: 200,
         message: "user Password has updated successfully",
-        data: result,
       });
     }
   } catch (err) {
@@ -260,4 +320,5 @@ export {
   forgetPassword,
   verify_Verification_Code,
   email_Number_Varification,
+  getUserByEmail
 };

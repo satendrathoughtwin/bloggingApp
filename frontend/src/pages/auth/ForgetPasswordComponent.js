@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ForgetPasswordComponent = ({forgetPassword,password,rePassword,inputEvent}) => {
+  const navigate = useNavigate();
     return (
       <section className="authSection">
         <header>Change Password</header>
@@ -33,7 +35,7 @@ const ForgetPasswordComponent = ({forgetPassword,password,rePassword,inputEvent}
           </div>
           <div>
             <button type="submit">Submit</button>
-            <button type="cancel">cancel</button>
+            <button type="cancel" onClick={()=>navigate('/login')}>cancel</button>
           </div>
         </form>
       </section>

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import RichEditor from "../../components/Editor/RichEditor";
 import { createPost, getPostById, updatePostById } from "../../services/api";
 import { storage } from "../../services/firebase";
+import { BiUpload } from "react-icons/bi";
 
 import swal from "sweetalert";
 import "./BlogPage.css";
@@ -133,7 +134,8 @@ const BlogPage = () => {
               <input type="file" />
 
               <button type="submit">
-                {buttonClick ? `Uploading ${progress} %` : "Upload *"}
+                
+                {buttonClick ? `Uploading ${progress} %` : <> <BiUpload/> Upload *</>}
               </button>
             </div>
           </form>
@@ -159,7 +161,7 @@ const BlogPage = () => {
 
             <div className="BlogPagebuttonDiv">
               <button type="submit">Post</button>
-              <button type="cancel">Cancel</button>
+              <button type="cancel" onClick={()=>navigate("/")}>Cancel</button>
             </div>
           </form>
         </>

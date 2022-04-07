@@ -1,6 +1,5 @@
 import axios from "axios";
 const createPost = async (body) => {
-  console.log("datattttta ----------->body");
   try {
     const result = await axios.post(`http://localhost:8000/api/blog`, body);
     if (result) {
@@ -12,11 +11,10 @@ const createPost = async (body) => {
 };
 
 const getPostById = async (postId) => {
-  console.log("Post id is comming", postId);
   try {
     const result = await axios.get(`http://localhost:8000/api/blog/${postId}`);
     if (result) {
-      console.log("get post data by Id ---->", result.data.data);
+   
       return result.data.data;
     }
   } catch (err) {
@@ -85,7 +83,6 @@ const login = async (body) => {
 
 const getAllpostsOfIndivisualUser = async (userEmail) => {
   try {
-    console.log("userEmail", userEmail);
     const result = await axios.get(`/api/userblog/${userEmail}`);
     if (result) {
       return result.data.data;
@@ -116,6 +113,16 @@ const getUserById = async (userId) => {
     console.log("user find is failed", err.message);
   }
 };
+const getUserByEmail = async (userEmail) => {
+  try {
+    const result = await axios.get(`/api/user/userfindByEmail/${userEmail}`);
+    if (result) {
+      return result.data.data;
+    }
+  } catch (err) {
+    console.log("user find is failed", err.message);
+  }
+};
 
 const email_Number_Varification = async (body) => {
   let payload ={emailNumberVarification : "", type : ""};
@@ -132,7 +139,7 @@ const email_Number_Varification = async (body) => {
   try {
     const result = await axios.patch(`/api/user/email_Number_Varification`,payload);
     if (result) {
-      return result.data
+      return result.data.numberFound
     }
   } catch (err) {
     console.log("Email Send failed", err.message);
@@ -140,11 +147,10 @@ const email_Number_Varification = async (body) => {
 };
 
 const OTPVarification = async (body) => {
-  console.log("OTPVarification", body);
   try {
     const result = await axios.patch(`/api/user/verify_Verification_Code`,body);
     if (result) {
-      return result.data;
+      return result.data.status;
     }
   } catch (err) {
     console.log("Email Send failed", err.message);
@@ -152,7 +158,6 @@ const OTPVarification = async (body) => {
 };
 
 const changePassword = async (body) => {
-  console.log("ForgetPasswordVarification", body);
   try {
     const result = await axios.patch(`/api/user/forgetPassword`,body);
     if (result) {
@@ -175,5 +180,6 @@ export {
   getUserById,
   email_Number_Varification,
   OTPVarification,
-  changePassword
+  changePassword,
+  getUserByEmail
 };

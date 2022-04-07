@@ -3,22 +3,36 @@ import BlogProfile from "../../components/blogProfile/BlogProfile";
 import {
   deletePostById,
   getAllpostsOfIndivisualUser,
+  getUserByEmail,
   getUserById,
 } from "../../services/api";
 import swal from "sweetalert";
 
+import { AiFillEdit } from "react-icons/ai";
+import {AlWorkplaceShareButtonl}  from "react-share"
 import "./UserProfile.css";
-import { NavLink } from "react-router-dom";
+import { NavLink,useParams } from "react-router-dom";
 const UserProfilePage = () => {
   const [allPostData, setALlPostData] = useState([]);
   const [userData, setUserData] = useState([]);
+  const { otherProfileId } = useParams();
+  const [isSameUser, setIsSameUser] = useState(true);
+  const [isFollow, setIsFollow] = useState(false);
 
   const allPost = async () => {
     const locatStorageData = await localStorage.getItem("loginUserData");
     const localStorageObjectData = await JSON.parse(locatStorageData);
-    const result = await getAllpostsOfIndivisualUser(
-      localStorageObjectData.email
-    );
+
+    otherProfileId === undefined ||
+    otherProfileId === localStorageObjectData.email
+      ? setIsSameUser(true)
+      : setIsSameUser(false);
+    let result;
+    if (otherProfileId) {
+      result = await getAllpostsOfIndivisualUser(otherProfileId);
+    } else
+      result = await getAllpostsOfIndivisualUser(localStorageObjectData.email);
+
     if (result) {
       setALlPostData(result);
     }
@@ -27,15 +41,14 @@ const UserProfilePage = () => {
   const getUserProfile = async () => {
     const locatStorageData = await localStorage.getItem("loginUserData");
     const localStorageObjectData = await JSON.parse(locatStorageData);
-    const result = await getUserById(localStorageObjectData._id);
+    let result;
+    if (otherProfileId) {
+      result = await getUserByEmail(otherProfileId);
+    } else result = await getUserById(localStorageObjectData._id);
     if (result) {
       setUserData(result[0]);
     }
   };
-  useEffect(() => {
-    getUserProfile();
-    allPost();
-  }, []);
 
   const deleteBlog = async (postId) => {
     const result = await deletePostById(postId);
@@ -59,6 +72,10 @@ const UserProfilePage = () => {
     }
   };
 
+  useEffect(() => {
+    getUserProfile();
+    allPost();
+  }, [otherProfileId]);
   return (
     <div className="userProfilePage">
       <section className="userProfile_Section">
@@ -70,7 +87,13 @@ const UserProfilePage = () => {
             }
             alt="pic"
           />
-          <NavLink to={`/userUpdate/${userData._id}`}>Edit</NavLink>
+          {isSameUser ? (
+            <NavLink to={`/userUpdate/${userData._id}`}>
+              <AiFillEdit />
+            </NavLink>
+          ) : (
+            ""
+          )}
         </figure>
         <aside className="userProfile_Section_Aside">
           <div className="userProfile_Section_Content">
@@ -85,13 +108,21 @@ const UserProfilePage = () => {
             <p>Profession</p>
             <p>: {userData.profession || "Blogger"}</p>
           </div>
+          <div>
+            <button className="followers">Followers 10000000</button>
+            {isFollow ? (
+              <button className="unfollow">UnFollow</button>
+            ) : (
+              <button className="follow">Follow</button>
+            )}
+          </div>
         </aside>
       </section>
       {allPostData.map((data, ind) => {
         return (
           <BlogProfile
             BlogData={data}
-            UserId={1234}
+            UserId={isSameUser}
             key={ind}
             deleteBlog={deleteBlog}
           />

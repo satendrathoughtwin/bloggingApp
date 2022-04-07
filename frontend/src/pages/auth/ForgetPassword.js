@@ -9,6 +9,7 @@ import ForgetPasswordComponent from "./ForgetPasswordComponent";
 import OTPVerificationComponent from "./OTPVerificationComponent";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
+import { Audio } from "react-loader-spinner";
 const ForgetPassword = () => {
   const [userDetail, setUserDetail] = useState({
     email: "",
@@ -17,9 +18,10 @@ const ForgetPassword = () => {
     rePassword: "",
     otp: "",
   });
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState("");
   const [isEmailVarification, setIsEmailVerification] = useState(false);
   const [isVarificationOTP, setIsVerificationOTP] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   const inputEvent = async (e) => {
     const { name, value } = e.target;
@@ -32,15 +34,22 @@ const ForgetPassword = () => {
   };
 
   const emailVarification = async (e) => {
+    await setLoader(true);
     e.preventDefault();
     const { email, number } = userDetail;
     if (email) setUserId(email);
-    if (number) setUserId(number);
+    if (number) setUserId(parseInt(number));
     const body = { email, number };
     const result = await email_Number_Varification(body);
     if (result) {
+      await setLoader(false);
       setIsEmailVerification(true);
       setUserDetail({ email: "", number: "" });
+    } else {
+      email
+        ? swal("Not Found", "Email is not registerd", "info")
+        : swal("Not Found", "Number is not registered");
+        navigate(-1)
     }
   };
 
@@ -51,6 +60,8 @@ const ForgetPassword = () => {
     const result = await OTPVarification(body);
     if (result) {
       setIsVerificationOTP(true);
+    } else {
+      swal("Failed", "You entered Wrong Otp", "error");
     }
   };
   const forgetPassword = async (e) => {
@@ -72,7 +83,14 @@ const ForgetPassword = () => {
 
   return (
     <>
-      {!isEmailVarification ? (
+      {loader ? (
+        <section className="authSection ">
+          <header>Wait ...</header>
+          <div className="loaderDiv">
+            <Audio height="100" width="100" color="red" ariaLabel="loading" />
+          </div>
+        </section>
+      ) : !isEmailVarification ? (
         <EmailVerificationComponent
           email={userDetail.email}
           number={userDetail.number}
@@ -88,15 +106,13 @@ const ForgetPassword = () => {
         />
       ) : (
         <ForgetPasswordComponent
-        forgetPassword={forgetPassword}
-        password={userDetail.password}
-        rePassword={userDetail.rePassword}
-        inputEvent={inputEvent}
-      />
+          forgetPassword={forgetPassword}
+          password={userDetail.password}
+          rePassword={userDetail.rePassword}
+          inputEvent={inputEvent}
+        />
       )}
     </>
-
-    
   );
 };
 

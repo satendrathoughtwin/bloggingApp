@@ -82,3 +82,9 @@ button {
 .blogPage_NotLoggedInDiv{
     text-align: center;
 }
+
+.BlogPagebuttonDiv :nth-child(2)
+{
+    background-color: rgb(241, 90, 90);
+    color: #fff;
+}

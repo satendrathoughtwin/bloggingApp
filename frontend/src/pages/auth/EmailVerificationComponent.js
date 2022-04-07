@@ -7,27 +7,28 @@ const EmailVerificationComponent = ({
   email,
   number,
 }) => {
-  const [isShow, setIsShow] = useState(false);
+  const [isShow, setIsShow] = useState(true);
   const navigate = useNavigate();
   return (
     <section className="authSection">
       <header>Email Verification</header>
       <div className="authSection_confirmationDiv">
+       
         <button
           onClick={() => {
-            setIsShow(!isShow);
-            setUserDetail({ email: "", number: null });
-          }}
-        >
-          Number
-        </button>
-        <button
-          onClick={() => {
-            setIsShow(!isShow);
+            setIsShow(true);
             setUserDetail({ email: "", number: null });
           }}
         >
           Email
+        </button>
+        <button
+          onClick={() => {
+            setIsShow(false);
+            setUserDetail({ email: "", number: null });
+          }}
+        >
+          Number
         </button>
       </div>
       <form onSubmit={emailVarification}>

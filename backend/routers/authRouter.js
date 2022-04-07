@@ -2,6 +2,7 @@ import expres from "express";
 import {
     email_Number_Varification,
   forgetPassword,
+  getUserByEmail,
   getUserById,
   registerUser,
   signInUser,
@@ -12,6 +13,7 @@ import {
 const route = expres.Router();
 
 route.get("/userfind/:userId", getUserById);
+route.get("/userfindByEmail/:email", getUserByEmail);
 
 route.post("/userRegister", registerUser);
 route.post("/userLogin", signInUser);

@@ -8,11 +8,13 @@ const sendMessage = async (msg, RECEIVER_MOBILE_NO) => {
       to: RECEIVER_MOBILE_NO,
     });
     if (result) {
+      console.log("message sent")
       return true;
     } else {
       return false;
     }
   } catch (err) {
+    console.log("error",err)
     return false;
   }
 };
