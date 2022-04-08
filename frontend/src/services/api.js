@@ -167,6 +167,31 @@ const changePassword = async (body) => {
     console.log("Email Send failed", err.message);
   }
 };
+
+
+const follow = async (body) => {
+  try {
+    const result = await axios.patch(`/api/user/follow`,body);
+    if (result) {
+      return result.data;
+    }
+  } catch (err) {
+    console.log("follow Failed", err.message);
+  }
+};
+
+const unFollow = async (body) => {
+  try {
+    const result = await axios.patch(`/api/user/unFollow`,body);
+    if (result) {
+      return result.data;
+    }
+  } catch (err) {
+    console.log("follow Failed", err.message);
+  }
+};
+
+
 export {
   createPost,
   getPostById,
@@ -181,5 +206,7 @@ export {
   email_Number_Varification,
   OTPVarification,
   changePassword,
-  getUserByEmail
+  getUserByEmail,
+  follow,
+  unFollow,
 };

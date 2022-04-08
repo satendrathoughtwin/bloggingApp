@@ -161,6 +161,180 @@ const updateBlog = async (req, res) => {
   }
 };
 
+const like = async (req, res) => {
+  const { likerId, userId, blogId } = req.body;
+  try {
+    const result = await User.findOneAndUpdate(
+      {
+        _id: blogId,
+        userEmail: userId,
+      },
+      { new: true }
+    );
+
+    if (result) {
+      res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "New Like is added",
+        data: result,
+      });
+    }
+  } catch (err) {
+    console.log(chalk.redBright(err.message));
+    res.status(400).json({
+      status: false,
+      statusCode: 400,
+      error: err.message,
+    });
+  }
+};
+
+const disLike = async (req, res) => {
+  const { likerId, userId, blogId } = req.body;
+  try {
+    const result = await User.findOneAndUpdate(
+      {
+        _id: blogId,
+        userEmail: userId,
+      },
+      { new: true }
+    );
+
+    if (result) {
+      res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "existing like has changed in dislike",
+        data: result,
+      });
+    }
+  } catch (err) {
+    console.log(chalk.redBright(err.message));
+    res.status(400).json({
+      status: false,
+      statusCode: 400,
+      error: err.message,
+    });
+  }
+};
+
+const Addcomment = async (req, res) => {
+  const { commenterId, commenterMessage, blogId, bloggerId } = req.body;
+  try {
+    const result = await User.findOneAndUpdate(
+      {
+        _id: blogId,
+        userEmail: bloggerId,
+      },
+      { new: true }
+    );
+
+    if (result) {
+      res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "New Comment is added",
+        data: result,
+      });
+    }
+  } catch (err) {
+    console.log(chalk.redBright(err.message));
+    res.status(400).json({
+      status: false,
+      statusCode: 400,
+      error: err.message,
+    });
+  }
+};
+
+const updateComment = async (req, res) => {
+  const { commenterId, commenterMessage, blogId, bloggerId } = req.body;
+  try {
+    const result = await User.findOneAndUpdate(
+      {
+        _id: blogId,
+        userEmail: bloggerId,
+      },
+      { new: true }
+    );
+
+    if (result) {
+      res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Exisitng Comment has updated",
+        data: result,
+      });
+    }
+  } catch (err) {
+    console.log(chalk.redBright(err.message));
+    res.status(400).json({
+      status: false,
+      statusCode: 400,
+      error: err.message,
+    });
+  }
+};
+
+const deleteComment = async (req, res) => {
+  const { commenterId, commenterMessage, blogId, bloggerId } = req.body;
+  try {
+    const result = await User.findOneAndUpdate(
+      {
+        _id: blogId,
+        userEmail: bloggerId,
+      },
+      { new: true }
+    );
+
+    if (result) {
+      res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Exisitng Comment has updated",
+        data: result,
+      });
+    }
+  } catch (err) {
+    console.log(chalk.redBright(err.message));
+    res.status(400).json({
+      status: false,
+      statusCode: 400,
+      error: err.message,
+    });
+  }
+};
+
+const search_filter_pagination = async (req, res) => {
+  const { commenterId, commenterMessage, blogId, bloggerId } = req.body;
+  try {
+    const result = await User.findOneAndUpdate(
+      {
+        _id: blogId,
+        userEmail: bloggerId,
+      },
+      { new: true }
+    );
+
+    if (result) {
+      res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Exisitng Comment has updated",
+        data: result,
+      });
+    }
+  } catch (err) {
+    console.log(chalk.redBright(err.message));
+    res.status(400).json({
+      status: false,
+      statusCode: 400,
+      error: err.message,
+    });
+  }
+};
+
 export {
   createBlog,
   getAllBlog,
@@ -168,4 +342,6 @@ export {
   deleteBlog,
   updateBlog,
   getBlogByUserEmail,
+  like,
+  disLike,
 };

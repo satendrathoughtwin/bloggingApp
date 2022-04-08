@@ -8,6 +8,7 @@ import { BiUpload } from "react-icons/bi";
 import swal from "sweetalert";
 import "./BlogPage.css";
 import { useNavigate, useParams } from "react-router-dom";
+import { localStorageData } from "../../services/localStorage";
 const BlogPage = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -19,13 +20,12 @@ const BlogPage = () => {
   const navigate = useNavigate();
 
   const updateBlog = async (postId) => {
-    const locatStorageData = await localStorage.getItem("loginUserData");
-    const localStorageObjectData = await JSON.parse(locatStorageData);
+    const local_Storage_Data = await localStorageData();
     const body = {
       title,
       description,
       imgUrl,
-      userEmail: localStorageObjectData.email,
+      userEmail: local_Storage_Data.email,
     };
     const result = await updatePostById(postId, body);
     if (result) {
@@ -49,13 +49,12 @@ const BlogPage = () => {
       updateBlog(blogId);
     } else {
       if (imgUrl) {
-        const locatStorageData = await localStorage.getItem("loginUserData");
-        const localStorageObjectData = await JSON.parse(locatStorageData);
+        const local_Storage_Data = await localStorageData();
         const body = {
           title,
           description,
           imgUrl,
-          userEmail: localStorageObjectData.email,
+          userEmail: local_Storage_Data.email,
         };
         const data = await createPost(body);
         if (data) {
@@ -80,9 +79,8 @@ const BlogPage = () => {
   };
 
   const findToken = async () => {
-    const locatStorageData = await localStorage.getItem("loginUserToken");
-    const localStorageObjectToken = await JSON.parse(locatStorageData);
-    setToken(localStorageObjectToken);
+    const local_Storage_Data = await localStorageData();
+    setToken(local_Storage_Data.token);
   };
 
   useEffect(() => {

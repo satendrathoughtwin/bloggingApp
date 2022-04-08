@@ -7,7 +7,6 @@ const Navbar = () => {
   const localStorageObjectData = JSON.parse(locatStorageData);
   const logoutUser = () => {
     localStorage.removeItem("loginUserData");
-    localStorage.removeItem("loginUserToken");
     navigate("/login")
   };
   return (

@@ -74,16 +74,25 @@
   color: #fff;
   width: auto !important;
   border: 1px solid rgb(40, 110, 87) !important;
+  padding:5px 8px  !important;  
 }
 
 .follow {
   background-color: blue !important;
   color: #fff;
   width: auto !important;
+  padding: 5px 8px !important; 
 }
 
 .unfollow {
   background-color:red !important;
   color: #fff;
   width: auto !important;
+  padding: 5px 8px !important; 
+}
+
+.userProfile_section_follow_ubfolow_div{
+  display: flex;
+  justify-content: center;
+  text-align: center;
 }

@@ -1,7 +1,7 @@
-import React, {useState } from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
-import { login} from "../../services/api";
+import { login } from "../../services/api";
 import "./Auth.css";
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -25,14 +25,10 @@ const LoginPage = () => {
       swal("Error", result.message, "error");
       return;
     }
-
     if (result) {
-      const newResult = result.data.result.result;
-      const newToken = result.data.result.token;
-
+      const newResult = result.data;
       swal("Successfully", "user login successfully", "success");
       localStorage.setItem("loginUserData", JSON.stringify(newResult));
-      localStorage.setItem("loginUserToken", JSON.stringify(newToken));
       setUserDetail({});
       navigate("/userProfile");
     }
@@ -52,7 +48,7 @@ const LoginPage = () => {
             placeholder="Type Email ... *"
             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
             required
-            autocomplete="off"
+            autoComplete="off"
           />
         </div>
         <div>
@@ -63,9 +59,9 @@ const LoginPage = () => {
             onChange={inputEvent}
             placeholder="Type Password ... *"
             name="password"
-            minlength="5"
+            minLength="5"
             required
-            autocomplete="off"
+            autoComplete="off"
           />
         </div>
         <div>

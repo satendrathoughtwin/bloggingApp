@@ -5,33 +5,39 @@ import {
   getAllpostsOfIndivisualUser,
   getUserByEmail,
   getUserById,
+  follow,
+  unFollow,
 } from "../../services/api";
 import swal from "sweetalert";
 
 import { AiFillEdit } from "react-icons/ai";
-import {AlWorkplaceShareButtonl}  from "react-share"
 import "./UserProfile.css";
-import { NavLink,useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
+import { localStorageData } from "../../services/localStorage";
 const UserProfilePage = () => {
   const [allPostData, setALlPostData] = useState([]);
   const [userData, setUserData] = useState([]);
+  const [followingUserId, setFollowingUserId] = useState("");
+  const [followingProfileId, setFollowingProfileId] = useState("");
   const { otherProfileId } = useParams();
   const [isSameUser, setIsSameUser] = useState(true);
   const [isFollow, setIsFollow] = useState(false);
+  const [isUserEmail, setIsUserEmail] = useState(false);
+  const [localStoreage, setLocalStoreage] = useState("");
 
   const allPost = async () => {
-    const locatStorageData = await localStorage.getItem("loginUserData");
-    const localStorageObjectData = await JSON.parse(locatStorageData);
-
-    otherProfileId === undefined ||
-    otherProfileId === localStorageObjectData.email
+    const local_Storage_Data = await localStorageData();
+    local_Storage_Data
+      ? setLocalStoreage(local_Storage_Data)
+      : setLocalStoreage("");
+    otherProfileId === undefined || otherProfileId === local_Storage_Data?.email
       ? setIsSameUser(true)
       : setIsSameUser(false);
     let result;
     if (otherProfileId) {
       result = await getAllpostsOfIndivisualUser(otherProfileId);
     } else
-      result = await getAllpostsOfIndivisualUser(localStorageObjectData.email);
+      result = await getAllpostsOfIndivisualUser(local_Storage_Data?.email);
 
     if (result) {
       setALlPostData(result);
@@ -39,14 +45,18 @@ const UserProfilePage = () => {
   };
 
   const getUserProfile = async () => {
-    const locatStorageData = await localStorage.getItem("loginUserData");
-    const localStorageObjectData = await JSON.parse(locatStorageData);
+    const local_Storage_Data = await localStorageData();
+    if (local_Storage_Data) setIsUserEmail(local_Storage_Data?.email);
     let result;
     if (otherProfileId) {
       result = await getUserByEmail(otherProfileId);
-    } else result = await getUserById(localStorageObjectData._id);
+      if (result) {
+        setFollowingUserId(result[0].email);
+        setFollowingProfileId(result[0]._id);
+      }
+    } else result = await getUserById(local_Storage_Data?._id);
     if (result) {
-      setUserData(result[0]);
+      setUserData(result);
     }
   };
 
@@ -72,52 +82,127 @@ const UserProfilePage = () => {
     }
   };
 
+  const followOtherUser = async (
+    myProfileId,
+    myProfileEmail,
+    otherProfileId,
+    otherProfileEmail
+  ) => {
+    const body = {
+      myProfileId,
+      myProfileEmail,
+      otherProfileId,
+      otherProfileEmail,
+    };
+    const result = await follow(body);
+    if (!result.isProceed) {
+      setIsFollow(isFollow);
+    }
+  };
+
+  const unfollowOtherUser = async (
+    myProfileId,
+    myProfileEmail,
+    otherProfileId,
+    otherProfileEmail
+  ) => {
+    const body = {
+      myProfileId,
+      myProfileEmail,
+      otherProfileId,
+      otherProfileEmail,
+    };
+    const result = await unFollow(body);
+    if (!result.isProceed) {
+      setIsFollow(false);
+    }
+  };
+
   useEffect(() => {
     getUserProfile();
     allPost();
   }, [otherProfileId]);
+
   return (
     <div className="userProfilePage">
-      <section className="userProfile_Section">
-        <figure className="userProfile_Section_figure">
-          <img
-            src={
-              userData.imgUrl ||
-              "https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
-            }
-            alt="pic"
-          />
-          {isSameUser ? (
-            <NavLink to={`/userUpdate/${userData._id}`}>
-              <AiFillEdit />
-            </NavLink>
-          ) : (
-            ""
-          )}
-        </figure>
-        <aside className="userProfile_Section_Aside">
-          <div className="userProfile_Section_Content">
-            <p>Name</p>
-            <p>: {userData.name}</p>
-          </div>
-          <div className="userProfile_Section_Content">
-            <p>Email</p>
-            <p>: {userData.email}</p>
-          </div>
-          <div className="userProfile_Section_Content">
-            <p>Profession</p>
-            <p>: {userData.profession || "Blogger"}</p>
-          </div>
-          <div>
-            <button className="followers">Followers 10000000</button>
-            {isFollow ? (
-              <button className="unfollow">UnFollow</button>
-            ) : (
-              <button className="follow">Follow</button>
-            )}
-          </div>
-        </aside>
-      </section>
+      {userData.map((data, ind) => {
+        return (
+          <section key={ind} className="userProfile_Section">
+            <figure className="userProfile_Section_figure">
+              <img
+                src={
+                  data.imgUrl ||
+                  "https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
+                }
+                alt="pic"
+              />
+              {isSameUser ? (
+                <NavLink to={`/userUpdate/${data._id}`}>
+                  <AiFillEdit />
+                </NavLink>
+              ) : (
+                ""
+              )}
+            </figure>
+            <aside className="userProfile_Section_Aside">
+              <div className="userProfile_Section_Content">
+                <p>Name</p>
+                <p>: {data.name}</p>
+              </div>
+              <div className="userProfile_Section_Content">
+                <p>Email</p>
+                <p>: {data.email}</p>
+              </div>
+              <div className="userProfile_Section_Content">
+                <p>Profession</p>
+                <p>: {data.profession || "Blogger"}</p>
+              </div>
+              <div className="userProfile_section_follow_ubfolow_div">
+                <button className="followers">
+                  Followers {data.followers.length}
+                </button>
+                <button className="followers">
+                  Following {data.following.length}
+                </button>
+                {isUserEmail !== otherProfileId && localStoreage ? (
+                  // isUserEmail !== otherProfileId ? (
+                  isFollow ? (
+                    <button
+                      className="unfollow"
+                      onClick={() =>
+                        unfollowOtherUser(
+                          data.email,
+                          followingUserId,
+                          followingProfileId
+                        )
+                      }
+                    >
+                      UnFollow
+                    </button>
+                  ) : (
+                    <button
+                      className="follow"
+                      onClick={() =>
+                        followOtherUser(
+                          followingUserId,
+                          followingProfileId,
+                          data.email,
+                          data._id
+                        )
+                      }
+                    >
+                      Follow
+                    </button>
+                  )
+                ) : (
+                  ""
+                )}
+              </div>
+            </aside>
+          </section>
+        );
+      })}
+
       {allPostData.map((data, ind) => {
         return (
           <BlogProfile

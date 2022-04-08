@@ -4,6 +4,7 @@ import generatetoken from "../utils/generateWebToken.js";
 import bcrypt from "bcrypt";
 import sendEmail from "../utils/email.js";
 import sendMessage from "../utils/message.js";
+import { resDataFuc } from "../utils/commanFunction.js";
 let varificationCode = Math.floor(Math.random() * 1000000 + 1);
 
 const registerUser = async (req, res) => {
@@ -74,13 +75,14 @@ const signInUser = async (req, res) => {
       return;
     } else {
       const token = await generatetoken(result._id, email);
-      result = { result, token };
+      const { name, number, _id } = result;
+      const finalResult = { _id, name, number, email: result.email, token };
       res.status(200).json({
         status: "success",
         statusCode: 200,
         length: result.length,
         message: "user loggedIn",
-        data: { result },
+        data: finalResult,
       });
     }
   } catch (err) {
@@ -150,7 +152,6 @@ const getUserById = async (req, res) => {
   }
 };
 
-
 const getUserByEmail = async (req, res) => {
   try {
     const result = await User.find({ email: req.params.email });
@@ -180,7 +181,6 @@ const getUserByEmail = async (req, res) => {
     });
   }
 };
-
 
 const email_Number_Varification = async (req, res) => {
   const { emailNumberVarification, type } = req.body;
@@ -312,6 +312,126 @@ const forgetPassword = async (req, res) => {
     });
   }
 };
+
+const follow = async (req, res) => {
+  const { myProfileId, myProfileEmail, otherProfileId, otherProfileEmail } =
+    req.body;
+  let message, length;
+  try {
+    const allreadyInOtherFollowerList = await User.findOne({
+      _id: otherProfileId,
+      followers: { $in: [myProfileEmail] },
+    });
+    const allreadyInMyFollwingList = await User.findOne({
+      _id: myProfileId,
+      following: { $in: [otherProfileEmail] },
+    });
+
+    const otherFollowerListResult =
+      !allreadyInOtherFollowerList &&
+      (await User.findOneAndUpdate(
+        {
+          _id: otherProfileId,
+          email: otherProfileEmail,
+        },
+        {
+          $push: { followers: myProfileEmail },
+        },
+        { new: true }
+      ));
+
+    const myFollowingListResult =
+      !allreadyInMyFollwingList &&
+      (await User.findOneAndUpdate(
+        {
+          _id: myProfileId,
+          email: myProfileEmail,
+        },
+        {
+          $push: { following: otherProfileEmail },
+        },
+        { new: true }
+      ));
+
+    otherFollowerListResult && myFollowingListResult
+      ? ((message = "new follower/following is added"),
+        (length = otherFollowerListResult.length))
+      : (message = "follower/following is already exist");
+    otherFollowerListResult && myFollowingListResult
+      ? resDataFuc(res, true, 200, true, message, length, false)
+      : resDataFuc(res, true, 203, false, message, length, false);
+  } catch (err) {
+    console.log(chalk.redBright(err.message));
+    resDataFuc(res, false, 400, false, message, length, false, err.message);
+  }
+};
+
+const isIN_MY_Following_And_Follower_List = async (req, res) => {
+  const { myProfileId, myProfileEmail, otherProfileId, otherProfileEmail } =
+    req.body;
+  let message, length;
+  try {
+    const allreadyInOtherFollowerList = await User.findOne({
+      _id: otherProfileId,
+      followers: { $in: [myProfileEmail] },
+    });
+    const allreadyInMyFollwingList = await User.findOne({
+      _id: myProfileId,
+
+      following: { $in: [otherProfileEmail] },
+    });
+
+    allreadyInOtherFollowerList && allreadyInMyFollwingList
+      ? (message = "follower/following is exist")
+      : (message = "follower/following isn't exist");
+    allreadyInOtherFollowerList && allreadyInMyFollwingList
+      ? resDataFuc(res, true, 200, true, message, 1, false)
+      : resDataFuc(res, true, 203, false, message, length, false);
+  } catch (err) {
+    console.log(chalk.redBright(err.message));
+    resDataFuc(res, false, 400, false, message, length, false, err.message);
+  }
+};
+
+const unfollow = async (req, res) => {
+  const { myProfileId, myProfileEmail, otherProfileId, otherProfileEmail } =
+    req.body;
+  let message, length;
+  try {
+    const otherFollowerListResult = await User.findOneAndUpdate(
+      {
+        _id: otherProfileId,
+        email: otherProfileEmail,
+      },
+      {
+        $pullAll: { followers: [myProfileEmail] },
+      },
+      { new: true }
+    );
+
+    const myFollowingListResult = await User.findOneAndUpdate(
+      {
+        _id: myProfileId,
+        email: myProfileEmail,
+      },
+      {
+        $pullAll: { following: [otherProfileEmail] },
+      },
+      { new: true }
+    );
+
+    otherFollowerListResult && myFollowingListResult
+      ? ((message = "existing follower/following has leaved"),
+        (length = otherFollowerListResult.length))
+      : (message = "follower/following has already leaved");
+    otherFollowerListResult && myFollowingListResult
+      ? resDataFuc(res, true, 200, true, message, length, false)
+      : resDataFuc(res, true, 203, false, message, length, false);
+  } catch (err) {
+    console.log(chalk.redBright(err.message));
+    resDataFuc(res, false, 400, false, message, length, false, err.message);
+  }
+};
 export {
   registerUser,
   signInUser,
@@ -320,5 +440,8 @@ export {
   forgetPassword,
   verify_Verification_Code,
   email_Number_Varification,
-  getUserByEmail
+  getUserByEmail,
+  follow,
+  unfollow,
+  isIN_MY_Following_And_Follower_List,
 };
