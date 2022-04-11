@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import BlogModel from "../model/blogModel.js";
+import { resDataFuc } from "../utils/commanFunction.js";
 
 const createBlog = async (req, res) => {
   const blogData = new BlogModel(req.body);
@@ -162,154 +163,179 @@ const updateBlog = async (req, res) => {
 };
 
 const like = async (req, res) => {
-  const { likerId, userId, blogId } = req.body;
+  const { myProfileId, myProfileEmail, likerProfileEmail } = req.body;
+  let message, length;
   try {
-    const result = await User.findOneAndUpdate(
-      {
-        _id: blogId,
-        userEmail: userId,
-      },
-      { new: true }
-    );
+    const allreadyInMyLikeList = await BlogModel.findOne({
+      _id: myProfileId,
+      like: { $in: [likerProfileEmail] },
+    });
 
-    if (result) {
-      res.status(200).json({
-        status: true,
-        statusCode: 200,
-        message: "New Like is added",
-        data: result,
-      });
-    }
+    const myLikeListResult =
+      !allreadyInMyLikeList &&
+      (await BlogModel.findOneAndUpdate(
+        {
+          _id: myProfileId,
+          userEmail: myProfileEmail,
+        },
+        {
+          $push: { like: likerProfileEmail },
+        },
+        { new: true }
+      ));
+
+    myLikeListResult
+      ? ((message = "new Like is added"), (length = myLikeListResult.length))
+      : (message = "like is already exist");
+    myLikeListResult
+      ? resDataFuc(res, true, 200, true, message, length, false)
+      : resDataFuc(res, true, 203, false, message, length, false);
   } catch (err) {
     console.log(chalk.redBright(err.message));
-    res.status(400).json({
-      status: false,
-      statusCode: 400,
-      error: err.message,
+    resDataFuc(res, false, 400, false, message, length, false, err.message);
+  }
+};
+
+const isIN_MY_Like_List = async (req, res) => {
+  const { myProfileId, likerProfileEmail } = req.body;
+  let message, length;
+  try {
+    const allreadyInMyLikeList = await BlogModel.findOne({
+      _id: myProfileId,
+      like: { $in: [likerProfileEmail] },
     });
+    allreadyInMyLikeList
+      ? (message = "like is exist")
+      : (message = "like isn't exist");
+    allreadyInMyLikeList
+      ? resDataFuc(res, true, 200, true, message, 1, false)
+      : resDataFuc(res, true, 203, false, message, length, false);
+  } catch (err) {
+    console.log(chalk.redBright(err.message));
+    resDataFuc(res, false, 400, false, message, length, false, err.message);
   }
 };
 
 const disLike = async (req, res) => {
-  const { likerId, userId, blogId } = req.body;
+  const { myProfileId, myProfileEmail, likerProfileEmail } = req.body;
+  let message, length;
   try {
-    const result = await User.findOneAndUpdate(
+    const myLikeListResult = await BlogModel.findOneAndUpdate(
       {
-        _id: blogId,
-        userEmail: userId,
+        _id: myProfileId,
+        email: myProfileEmail,
+      },
+      {
+        $pullAll: { like: [likerProfileEmail] },
       },
       { new: true }
     );
 
-    if (result) {
-      res.status(200).json({
-        status: true,
-        statusCode: 200,
-        message: "existing like has changed in dislike",
-        data: result,
-      });
-    }
+    myLikeListResult
+      ? ((message = "liker has leaved"), (length = myLikeListResult.length))
+      : (message = "liker has already leaved");
+    myLikeListResult
+      ? resDataFuc(res, true, 200, true, message, length, false)
+      : resDataFuc(res, true, 203, false, message, length, false);
   } catch (err) {
     console.log(chalk.redBright(err.message));
-    res.status(400).json({
-      status: false,
-      statusCode: 400,
-      error: err.message,
-    });
+    resDataFuc(res, false, 400, false, message, length, false, err.message);
   }
 };
 
-const Addcomment = async (req, res) => {
-  const { commenterId, commenterMessage, blogId, bloggerId } = req.body;
+const addComment = async (req, res) => {
+  const { myProfileId, myProfileEmail, comment } = req.body;
+  let message, length;
   try {
-    const result = await User.findOneAndUpdate(
+    const myCommentListResult = await BlogModel.findOneAndUpdate(
       {
-        _id: blogId,
-        userEmail: bloggerId,
+        _id: myProfileId,
+        email: myProfileEmail,
+      },
+      {
+        $push: { comment },
       },
       { new: true }
     );
 
-    if (result) {
-      res.status(200).json({
-        status: true,
-        statusCode: 200,
-        message: "New Comment is added",
-        data: result,
-      });
-    }
+    myCommentListResult
+      ? ((message = "new follower/following is added"),
+        (length = myCommentListResult.length))
+      : (message = "follower/following is already exist");
+    myCommentListResult
+      ? resDataFuc(res, true, 200, true, message, length, false)
+      : resDataFuc(res, true, 203, false, message, length, false);
   } catch (err) {
     console.log(chalk.redBright(err.message));
-    res.status(400).json({
-      status: false,
-      statusCode: 400,
-      error: err.message,
-    });
+    resDataFuc(res, false, 400, false, message, length, false, err.message);
   }
 };
 
 const updateComment = async (req, res) => {
-  const { commenterId, commenterMessage, blogId, bloggerId } = req.body;
+  const { myProfileId, myProfileEmail, commentId, comment } = req.body;
   try {
-    const result = await User.findOneAndUpdate(
+    const myCommentListResult = await BlogModel.findOneAndUpdate(
       {
-        _id: blogId,
-        userEmail: bloggerId,
+        _id: myProfileId,
+        userEmail: myProfileEmail,
+        "$comment.id": `${commentId}`,
+      },
+
+      {
+        $set: {
+          "comment.$.comment": `${comment}`,
+        },
       },
       { new: true }
     );
 
-    if (result) {
-      res.status(200).json({
-        status: true,
-        statusCode: 200,
-        message: "Exisitng Comment has updated",
-        data: result,
-      });
-    }
+    myCommentListResult
+      ? ((message = "new follower/following is added"),
+        (length = myCommentListResult.length))
+      : (message = "follower/following is already exist");
+    myCommentListResult
+      ? resDataFuc(res, true, 200, true, message, length, false)
+      : resDataFuc(res, true, 203, false, message, length, false);
   } catch (err) {
     console.log(chalk.redBright(err.message));
-    res.status(400).json({
-      status: false,
-      statusCode: 400,
-      error: err.message,
-    });
+    resDataFuc(res, false, 400, false, message, length, false, err.message);
   }
 };
 
 const deleteComment = async (req, res) => {
-  const { commenterId, commenterMessage, blogId, bloggerId } = req.body;
+  const { myProfileId, myProfileEmail, commentId } = req.body;
+  let message, length;
   try {
-    const result = await User.findOneAndUpdate(
+    const myCommentListResult = await BlogModel.findOneAndUpdate(
       {
-        _id: blogId,
-        userEmail: bloggerId,
+        _id: myProfileId,
+        email: myProfileEmail,
+      },
+      {
+        $pullAll: {
+          Comment: [{ _id: commentId }],
+        },
       },
       { new: true }
     );
 
-    if (result) {
-      res.status(200).json({
-        status: true,
-        statusCode: 200,
-        message: "Exisitng Comment has updated",
-        data: result,
-      });
-    }
+    myCommentListResult
+      ? ((message = "new follower/following is added"),
+        (length = myCommentListResult.length))
+      : (message = "follower/following is already exist");
+    myCommentListResult
+      ? resDataFuc(res, true, 200, true, message, length, false)
+      : resDataFuc(res, true, 203, false, message, length, false);
   } catch (err) {
     console.log(chalk.redBright(err.message));
-    res.status(400).json({
-      status: false,
-      statusCode: 400,
-      error: err.message,
-    });
+    resDataFuc(res, false, 400, false, message, length, false, err.message);
   }
 };
 
 const search_filter_pagination = async (req, res) => {
   const { commenterId, commenterMessage, blogId, bloggerId } = req.body;
   try {
-    const result = await User.findOneAndUpdate(
+    const result = await BlogModel.findOneAndUpdate(
       {
         _id: blogId,
         userEmail: bloggerId,
@@ -344,4 +370,8 @@ export {
   getBlogByUserEmail,
   like,
   disLike,
+  isIN_MY_Like_List,
+  addComment,
+  deleteComment,
+  updateComment,
 };

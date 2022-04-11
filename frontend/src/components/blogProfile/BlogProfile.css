@@ -104,3 +104,7 @@ h2 {
   border : 1px solid aquamarine;
   color : #fff
 }
+
+.likeButton :nth-child(1){
+  color: rgba(10, 10, 235, 0.979);
+}

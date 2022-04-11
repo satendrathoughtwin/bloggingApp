@@ -7,6 +7,7 @@ import {
   getUserById,
   follow,
   unFollow,
+  alreadyFollowing,
 } from "../../services/api";
 import swal from "sweetalert";
 
@@ -53,6 +54,12 @@ const UserProfilePage = () => {
       if (result) {
         setFollowingUserId(result[0].email);
         setFollowingProfileId(result[0]._id);
+        await isFollowing(
+          local_Storage_Data._id,
+          local_Storage_Data.email,
+          result[0]._id,
+          otherProfileId
+        );
       }
     } else result = await getUserById(local_Storage_Data?._id);
     if (result) {
@@ -95,8 +102,8 @@ const UserProfilePage = () => {
       otherProfileEmail,
     };
     const result = await follow(body);
-    if (!result.isProceed) {
-      setIsFollow(isFollow);
+    if (result.isProceed) {
+      setIsFollow(true);
     }
   };
 
@@ -113,8 +120,26 @@ const UserProfilePage = () => {
       otherProfileEmail,
     };
     const result = await unFollow(body);
-    if (!result.isProceed) {
+    if (result.isProceed) {
       setIsFollow(false);
+    }
+  };
+
+  const isFollowing = async (
+    myProfileId,
+    myProfileEmail,
+    otherProfileId,
+    otherProfileEmail
+  ) => {
+    const body = {
+      myProfileId,
+      myProfileEmail,
+      otherProfileId,
+      otherProfileEmail,
+    };
+    const result = await alreadyFollowing(body);
+    if (result.isProceed) {
+      setIsFollow(true);
     }
   };
 
@@ -123,6 +148,9 @@ const UserProfilePage = () => {
     allPost();
   }, [otherProfileId]);
 
+  useEffect(() => {
+    getUserProfile();
+  }, [isFollow]);
   return (
     <div className="userProfilePage">
       {userData.map((data, ind) => {
@@ -171,9 +199,10 @@ const UserProfilePage = () => {
                       className="unfollow"
                       onClick={() =>
                         unfollowOtherUser(
-                          data.email,
-                          followingUserId,
-                          followingProfileId
+                          localStoreage._id,
+                          localStoreage.email,
+                          followingProfileId,
+                          followingUserId
                         )
                       }
                     >
@@ -184,10 +213,10 @@ const UserProfilePage = () => {
                       className="follow"
                       onClick={() =>
                         followOtherUser(
-                          followingUserId,
+                          localStoreage._id,
+                          localStoreage.email,
                           followingProfileId,
-                          data.email,
-                          data._id
+                          followingUserId
                         )
                       }
                     >
@@ -203,16 +232,16 @@ const UserProfilePage = () => {
         );
       })}
 
-      {allPostData.map((data, ind) => {
-        return (
-          <BlogProfile
-            BlogData={data}
-            UserId={isSameUser}
-            key={ind}
-            deleteBlog={deleteBlog}
-          />
-        );
-      })}
+      {allPostData &&
+        allPostData.map((data, ind) => {
+          return (
+            <BlogProfile
+              BlogData={data}
+              UserId={isSameUser}
+              deleteBlog={deleteBlog}
+            />
+          );
+        })}
     </div>
   );
 };

@@ -14,7 +14,6 @@ const getPostById = async (postId) => {
   try {
     const result = await axios.get(`http://localhost:8000/api/blog/${postId}`);
     if (result) {
-   
       return result.data.data;
     }
   } catch (err) {
@@ -125,21 +124,22 @@ const getUserByEmail = async (userEmail) => {
 };
 
 const email_Number_Varification = async (body) => {
-  let payload ={emailNumberVarification : "", type : ""};
-  const {email,number} = body;
-  if(email)
-  {
-    payload.emailNumberVarification = email
-    payload.type = "just for logic"
-  }
-  else{
-    payload.emailNumberVarification = number
-    payload.type = 1234567890
+  let payload = { emailNumberVarification: "", type: "" };
+  const { email, number } = body;
+  if (email) {
+    payload.emailNumberVarification = email;
+    payload.type = "just for logic";
+  } else {
+    payload.emailNumberVarification = number;
+    payload.type = 1234567890;
   }
   try {
-    const result = await axios.patch(`/api/user/email_Number_Varification`,payload);
+    const result = await axios.patch(
+      `/api/user/email_Number_Varification`,
+      payload
+    );
     if (result) {
-      return result.data.numberFound
+      return result.data.numberFound;
     }
   } catch (err) {
     console.log("Email Send failed", err.message);
@@ -148,7 +148,10 @@ const email_Number_Varification = async (body) => {
 
 const OTPVarification = async (body) => {
   try {
-    const result = await axios.patch(`/api/user/verify_Verification_Code`,body);
+    const result = await axios.patch(
+      `/api/user/verify_Verification_Code`,
+      body
+    );
     if (result) {
       return result.data.status;
     }
@@ -159,7 +162,7 @@ const OTPVarification = async (body) => {
 
 const changePassword = async (body) => {
   try {
-    const result = await axios.patch(`/api/user/forgetPassword`,body);
+    const result = await axios.patch(`/api/user/forgetPassword`, body);
     if (result) {
       return result.data;
     }
@@ -168,10 +171,23 @@ const changePassword = async (body) => {
   }
 };
 
-
 const follow = async (body) => {
   try {
-    const result = await axios.patch(`/api/user/follow`,body);
+    const result = await axios.patch(`/api/user/follow`, body);
+    if (result) {
+      return result.data;
+    }
+  } catch (err) {
+    console.log("follow Failed", err.message);
+  }
+};
+
+const alreadyFollowing = async (body) => {
+  try {
+    const result = await axios.patch(
+      `/api/user/isInMyFollowingAndFollowerList`,
+      body
+    );
     if (result) {
       return result.data;
     }
@@ -182,7 +198,7 @@ const follow = async (body) => {
 
 const unFollow = async (body) => {
   try {
-    const result = await axios.patch(`/api/user/unFollow`,body);
+    const result = await axios.patch(`/api/user/unFollow`, body);
     if (result) {
       return result.data;
     }
@@ -191,6 +207,51 @@ const unFollow = async (body) => {
   }
 };
 
+const like = async (body) => {
+  try {
+    const result = await axios.patch(`/api/blogLike`, body);
+    if (result) {
+      return result.data;
+    }
+  } catch (err) {
+    console.log("Like Failed", err.message);
+  }
+};
+
+const alreadyLiked = async (body) => {
+  try {
+    console.log("already liked",body)
+    const result = await axios.patch(`/api/blogLikeIsExist`, body);
+    if (result) {
+      return result.data;
+    }
+  } catch (err) {
+    console.log("follow Failed", err.message);
+  }
+};
+
+const disLike = async (body) => {
+  try {
+    const result = await axios.patch(`/api/blogDisLike`, body);
+    if (result) {
+      return result.data;
+    }
+  } catch (err) {
+    console.log("DisLike Failed", err.message);
+  }
+};
+
+
+const addComment = async (body) => {
+  try {
+    const result = await axios.patch(`/api/comment`, body);
+    if (result) {
+      return result.data;
+    }
+  } catch (err) {
+    console.log("comment Failed", err.message);
+  }
+};
 
 export {
   createPost,
@@ -209,4 +270,9 @@ export {
   getUserByEmail,
   follow,
   unFollow,
+  alreadyFollowing,
+  like,
+  disLike,
+  alreadyLiked,
+  addComment
 };

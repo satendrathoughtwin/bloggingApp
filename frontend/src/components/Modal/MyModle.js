@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Modal from "react-modal";
-import './MyModel.css'
-import { FiShare2 } from "react-icons/fi";
+import "./MyModel.css";
 const customStyles = {
   content: {
     top: "50%",
@@ -12,7 +11,7 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
   },
 };
-const MyModle = ({ MainContent }) => {
+const MyModle = ({ MainContent, ButtonIcon }) => {
   let subtitle;
   const [modalIsOpen, setIsOpen] = React.useState(false);
   function openModal() {
@@ -24,10 +23,13 @@ const MyModle = ({ MainContent }) => {
   function closeModal() {
     setIsOpen(false);
   }
+  useEffect(() => {
+    console.log("buttonn Icon".ButtonIcon);
+  }, []);
   return (
     <div>
       <div className="myModalSpan" onClick={openModal}>
-        <FiShare2 />
+        {ButtonIcon}
       </div>
       <Modal
         isOpen={modalIsOpen}
