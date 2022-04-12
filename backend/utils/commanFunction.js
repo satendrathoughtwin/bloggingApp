@@ -8,6 +8,8 @@ const resDataFuc = async (
     data = "No result found",
     error = "No Error"
   ) => {
+
+
     res.status(statusCode).json({
       status,
       statusCode,

@@ -26,7 +26,7 @@ const createBlog = async (req, res) => {
 
 const getAllBlog = async (req, res) => {
   try {
-    const result = await BlogModel.find();
+    const result = await BlogModel.find().sort({ createdAt: -1 });
     if (result.length > 0) {
       res.status(200).json({
         status: "success",
@@ -244,7 +244,8 @@ const disLike = async (req, res) => {
 };
 
 const addComment = async (req, res) => {
-  const { myProfileId, myProfileEmail, comment } = req.body;
+  const { myProfileId, myProfileEmail, commenterId, commenterEmail, comment } =
+    req.body;
   let message, length;
   try {
     const myCommentListResult = await BlogModel.findOneAndUpdate(
@@ -252,19 +253,35 @@ const addComment = async (req, res) => {
         _id: myProfileId,
         email: myProfileEmail,
       },
-      {
-        $push: { comment },
-      },
+
+      { $push: { comment: { commenterId, commenterEmail, comment } } },
       { new: true }
     );
 
     myCommentListResult
-      ? ((message = "new follower/following is added"),
-        (length = myCommentListResult.length))
-      : (message = "follower/following is already exist");
+      ? ((message = "comment is added"), (length = myCommentListResult.length))
+      : (message = "comment is already added");
     myCommentListResult
-      ? resDataFuc(res, true, 200, true, message, length, false)
-      : resDataFuc(res, true, 203, false, message, length, false);
+      ? resDataFuc(
+          res,
+          true,
+          200,
+          true,
+          message,
+          length,
+          myCommentListResult,
+          false
+        )
+      : resDataFuc(
+          res,
+          true,
+          203,
+          false,
+          message,
+          length,
+          myCommentListResult,
+          false
+        );
   } catch (err) {
     console.log(chalk.redBright(err.message));
     resDataFuc(res, false, 400, false, message, length, false, err.message);
@@ -272,13 +289,22 @@ const addComment = async (req, res) => {
 };
 
 const updateComment = async (req, res) => {
-  const { myProfileId, myProfileEmail, commentId, comment } = req.body;
+  const {
+    myProfileId,
+    myProfileEmail,
+    commenterId,
+    commenterEmail,
+    comment,
+    commentId,
+  } = req.body;
+  let message, length;
+
   try {
     const myCommentListResult = await BlogModel.findOneAndUpdate(
       {
         _id: myProfileId,
         userEmail: myProfileEmail,
-        "$comment.id": `${commentId}`,
+        "comment._id": commentId,
       },
 
       {
@@ -290,12 +316,30 @@ const updateComment = async (req, res) => {
     );
 
     myCommentListResult
-      ? ((message = "new follower/following is added"),
+      ? ((message = "comment has updated"),
         (length = myCommentListResult.length))
-      : (message = "follower/following is already exist");
+      : (message = "comment has not updated");
     myCommentListResult
-      ? resDataFuc(res, true, 200, true, message, length, false)
-      : resDataFuc(res, true, 203, false, message, length, false);
+      ? resDataFuc(
+          res,
+          true,
+          200,
+          true,
+          message,
+          length,
+          myCommentListResult,
+          false
+        )
+      : resDataFuc(
+          res,
+          true,
+          203,
+          false,
+          message,
+          length,
+          myCommentListResult,
+          false
+        );
   } catch (err) {
     console.log(chalk.redBright(err.message));
     resDataFuc(res, false, 400, false, message, length, false, err.message);
@@ -303,7 +347,7 @@ const updateComment = async (req, res) => {
 };
 
 const deleteComment = async (req, res) => {
-  const { myProfileId, myProfileEmail, commentId } = req.body;
+  const { myProfileId, myProfileEmail, commentId, commenterId } = req.body;
   let message, length;
   try {
     const myCommentListResult = await BlogModel.findOneAndUpdate(
@@ -312,20 +356,37 @@ const deleteComment = async (req, res) => {
         email: myProfileEmail,
       },
       {
-        $pullAll: {
-          Comment: [{ _id: commentId }],
+        $pull: {
+          comment: { _id: commentId, commenterId },
         },
       },
       { new: true }
     );
-
     myCommentListResult
-      ? ((message = "new follower/following is added"),
+      ? ((message = "comment is deleted"),
         (length = myCommentListResult.length))
-      : (message = "follower/following is already exist");
+      : (message = "comment is already deleted");
     myCommentListResult
-      ? resDataFuc(res, true, 200, true, message, length, false)
-      : resDataFuc(res, true, 203, false, message, length, false);
+      ? resDataFuc(
+          res,
+          true,
+          200,
+          true,
+          message,
+          length,
+          myCommentListResult,
+          false
+        )
+      : resDataFuc(
+          res,
+          true,
+          203,
+          false,
+          message,
+          length,
+          myCommentListResult,
+          false
+        );
   } catch (err) {
     console.log(chalk.redBright(err.message));
     resDataFuc(res, false, 400, false, message, length, false, err.message);
@@ -333,31 +394,29 @@ const deleteComment = async (req, res) => {
 };
 
 const search_filter_pagination = async (req, res) => {
-  const { commenterId, commenterMessage, blogId, bloggerId } = req.body;
-  try {
-    const result = await BlogModel.findOneAndUpdate(
-      {
-        _id: blogId,
-        userEmail: bloggerId,
-      },
-      { new: true }
-    );
+  const { findBy, findValue, sortBy, sortedOrder, page, size } = req.query;
+  let skipItems = 0,
+    message = "",
+    length = 0;
+  if (parseInt(page) !== 1) {
+    skipItems = (page - 1) * size;
+  }
 
-    if (result) {
-      res.status(200).json({
-        status: true,
-        statusCode: 200,
-        message: "Exisitng Comment has updated",
-        data: result,
-      });
-    }
+  try {
+    const result = await BlogModel.find({ [findBy]: findValue })
+      .sort({ [sortBy]: sortedOrder })
+      .limit(size)
+      .skip(skipItems);
+
+    result
+      ? ((message = "data search successfully"), (length = result.length))
+      : (message = "search has no data");
+    result
+      ? resDataFuc(res, true, 200, true, message, length, result, false)
+      : resDataFuc(res, true, 203, false, message, length, result, false);
   } catch (err) {
     console.log(chalk.redBright(err.message));
-    res.status(400).json({
-      status: false,
-      statusCode: 400,
-      error: err.message,
-    });
+    resDataFuc(res, false, 400, false, message, length, false, err.message);
   }
 };
 
@@ -374,4 +433,5 @@ export {
   addComment,
   deleteComment,
   updateComment,
+  search_filter_pagination,
 };

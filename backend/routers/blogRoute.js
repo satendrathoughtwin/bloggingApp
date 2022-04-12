@@ -1,17 +1,34 @@
 import express from "express";
-import { createBlog, deleteBlog, disLike, getAllBlog, getBlogById, getBlogByUserEmail, isIN_MY_Like_List, like, updateBlog } from "../controller/blogController.js";
-const router = express.Router()
-router.get('/blog',getAllBlog)
-router.get('/blog/:Id',getBlogById)
-router.get('/userblog/:userEmail',getBlogByUserEmail)
+import {
+  addComment,
+  createBlog,
+  deleteBlog,
+  deleteComment,
+  disLike,
+  getAllBlog,
+  getBlogById,
+  getBlogByUserEmail,
+  isIN_MY_Like_List,
+  like,
+  search_filter_pagination,
+  updateBlog,
+  updateComment,
+} from "../controller/blogController.js";
+const router = express.Router();
+router.get("/blog", getAllBlog);
+router.get("/blog/:Id", getBlogById);
+router.get("/userblog/:userEmail", getBlogByUserEmail);
+router.get("/blogdata", search_filter_pagination);
 
+router.post("/blog", createBlog);
+router.post("/comment", addComment);
 
-router.post('/blog',createBlog)
+router.patch("/blogLike", like);
+router.patch("/blogDisLike", disLike);
+router.patch("/blog/:Id", updateBlog);
+router.patch("/blogLikeIsExist", isIN_MY_Like_List);
+router.patch("/comment", updateComment);
 
-router.patch('/blogLike',like)
-router.patch('/blogDisLike',disLike)
-router.patch('/blog/:Id',updateBlog)
-router.patch('/blogLikeIsExist',isIN_MY_Like_List)
-
-router.delete('/blog/:Id',deleteBlog)
+router.delete("/blog/:Id", deleteBlog);
+router.delete("/comment", deleteComment);
 export default router;

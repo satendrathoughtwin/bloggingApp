@@ -220,7 +220,7 @@ const like = async (body) => {
 
 const alreadyLiked = async (body) => {
   try {
-    console.log("already liked",body)
+    console.log("already liked", body);
     const result = await axios.patch(`/api/blogLikeIsExist`, body);
     if (result) {
       return result.data;
@@ -241,7 +241,6 @@ const disLike = async (body) => {
   }
 };
 
-
 const addComment = async (body) => {
   try {
     const result = await axios.patch(`/api/comment`, body);
@@ -250,6 +249,22 @@ const addComment = async (body) => {
     }
   } catch (err) {
     console.log("comment Failed", err.message);
+  }
+};
+
+const search_filter_pagination = async (body) => {
+  const { findBy, findValue, sortBy, sortedOrder, page, size } = body;
+  try {
+    const result = await axios.get(
+      `/api/blogdata?findBy=${findBy}&findValue=${findValue}&sortBy=${sortBy}&sortedOrder=${sortedOrder}&page=${page}&size=${size}`,
+      body
+    );
+    if (result) {
+      console.log("SearchData, search DAta--------->", result);
+      return result.data;
+    }
+  } catch (err) {
+    console.log("search_filter_pagination Failed", err.message);
   }
 };
 
@@ -274,5 +289,6 @@ export {
   like,
   disLike,
   alreadyLiked,
-  addComment
+  addComment,
+  search_filter_pagination,
 };

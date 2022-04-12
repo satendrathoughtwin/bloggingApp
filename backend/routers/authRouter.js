@@ -12,7 +12,6 @@ import {
   verify_Verification_Code,
   isIN_MY_Following_And_Follower_List
 } from "../controller/authController.js";
-import { addComment } from "../controller/blogController.js";
 
 const route = expres.Router();
 
@@ -29,6 +28,5 @@ route.patch("/email_Number_Varification", email_Number_Varification);
 route.patch("/verify_Verification_Code", verify_Verification_Code);
 route.patch("/follow", follow);
 route.patch("/unFollow", unfollow);
-route.patch("/comment", addComment);
 
 export default route;
