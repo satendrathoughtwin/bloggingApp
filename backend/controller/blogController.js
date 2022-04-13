@@ -403,7 +403,15 @@ const search_filter_pagination = async (req, res) => {
   }
 
   try {
-    const result = await BlogModel.find({ [findBy]: findValue })
+    const query = { $regex: findValue };
+    // const query = { $regex: "^" + findValue };
+    const result = await BlogModel.find({
+      $or: [
+        {
+          [findBy]: query,
+        },
+      ],
+    })
       .sort({ [sortBy]: sortedOrder })
       .limit(size)
       .skip(skipItems);

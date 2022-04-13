@@ -220,7 +220,6 @@ const like = async (body) => {
 
 const alreadyLiked = async (body) => {
   try {
-    console.log("already liked", body);
     const result = await axios.patch(`/api/blogLikeIsExist`, body);
     if (result) {
       return result.data;
@@ -260,8 +259,7 @@ const search_filter_pagination = async (body) => {
       body
     );
     if (result) {
-      console.log("SearchData, search DAta--------->", result);
-      return result.data;
+      return result.data.data;
     }
   } catch (err) {
     console.log("search_filter_pagination Failed", err.message);

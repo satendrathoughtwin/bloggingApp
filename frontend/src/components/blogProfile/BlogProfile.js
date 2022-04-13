@@ -7,10 +7,11 @@ import { GoCommentDiscussion } from "react-icons/go";
 import { MdDelete } from "react-icons/md";
 import { NavLink, useNavigate } from "react-router-dom";
 import MyModle from "../Modal/MyModle";
-import { addComment, alreadyLiked, disLike, like } from "../../services/api";
+import { alreadyLiked, disLike, like } from "../../services/api";
 import SocialMedia from "../socialMedia.js/SocialMedia";
 import { localStorageData } from "../../services/localStorage";
 import AddComment from "../../pages/comment/AddComment";
+import Likes from "../../pages/likes/Likes";
 const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
   const navigate = useNavigate();
   const [isLike, setIsLike] = useState(false);
@@ -58,27 +59,11 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
     } catch (err) {}
   };
 
-  const addCommentOnPost = async (myProfileId, myProfileEmail) => {
-    const local_Storage_Data = await localStorageData();
-    try {
-      const body = {
-        myProfileId,
-        myProfileEmail,
-        likerProfileEmail: local_Storage_Data.email,
-      };
-      const result = await addComment(body);
-      if (result.isProceed) {
-        setIsLike(true);
-      }
-    } catch (err) {}
-  };
-
   useEffect(() => {
     alreadyBlogLiked();
   }, [isLike]);
 
   useEffect(() => {
-    console.log("BlogDATa", BlogData);
     alreadyBlogLiked();
   }, [BlogData]);
   return (
@@ -128,16 +113,17 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
           <span>
             <FcLike />
           </span>
-          <span>
-            Sapna@82, sharshti632, and you, {BlogData?.like?.length} others
-          </span>
-          {/* <span>
-            {BlogData?.like[BlogData?.like?.length - 1]},
-            {BlogData?.like[BlogData?.like?.length - 2]}, and you,
-            {BlogData?.like?.length} others
-          </span> */}
+
+          <MyModle
+            MainContent={Likes}
+            id={BlogData._id}
+            ButtonContent="Sapna@82, sharshti632 and  others"
+          />
         </div>
-        <NavLink to="/">{BlogData?.comment?.length} comments</NavLink>
+        <MyModle
+          MainContent={AddComment}
+          ButtonContent={`${BlogData?.comment?.length} comments`}
+        />
       </footer>
       <footer className="BlogProfileFooterButton">
         {isLike ? (
@@ -153,14 +139,18 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
           </button>
         )}
         <button>
-          {/* <GoCommentDiscussion /> */}
           <MyModle
             MainContent={AddComment}
+            id={BlogData._id}
             ButtonIcon={<GoCommentDiscussion />}
           />
         </button>
         <button>
-          <MyModle MainContent={SocialMedia} ButtonIcon={<FiShare2 />} />
+          <MyModle
+            MainContent={SocialMedia}
+            id={BlogData._id}
+            ButtonIcon={<FiShare2 />}
+          />
         </button>
       </footer>
     </div>

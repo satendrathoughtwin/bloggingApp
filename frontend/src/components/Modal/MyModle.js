@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Modal from "react-modal";
 import "./MyModel.css";
 const customStyles = {
@@ -11,8 +11,7 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
   },
 };
-const MyModle = ({ MainContent, ButtonIcon }) => {
-  let subtitle;
+const MyModle = ({ MainContent, ButtonIcon, ButtonContent, id }) => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
   function openModal() {
     setIsOpen(true);
@@ -23,13 +22,10 @@ const MyModle = ({ MainContent, ButtonIcon }) => {
   function closeModal() {
     setIsOpen(false);
   }
-  useEffect(() => {
-    console.log("buttonn Icon".ButtonIcon);
-  }, []);
   return (
     <div>
       <div className="myModalSpan" onClick={openModal}>
-        {ButtonIcon}
+        {ButtonIcon || ButtonContent}
       </div>
       <Modal
         isOpen={modalIsOpen}
@@ -40,7 +36,7 @@ const MyModle = ({ MainContent, ButtonIcon }) => {
         ariaHideApp={false}
       >
         <div>
-          <MainContent />
+          <MainContent id={id} />
         </div>
       </Modal>
     </div>

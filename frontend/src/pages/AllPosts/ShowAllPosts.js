@@ -7,6 +7,7 @@ import { search_filter_pagination } from "../../services/api";
 const ShowAllPosts = () => {
   const [allPost, setAllPost] = useState([]);
   const searchData = useSelector((state) => state.searchBlogReducer);
+
   const getPost = async () => {
     const result = await getAllPosts();
     if (result) {
@@ -15,7 +16,11 @@ const ShowAllPosts = () => {
   };
 
   const searchBlog = async (searchData) => {
-    const body = {
+    if (searchData === "") {
+      getPost();
+      return;
+    }
+    const body = await {
       findBy: "title",
       findValue: searchData,
       sortBy: "createdAt",
@@ -26,7 +31,7 @@ const ShowAllPosts = () => {
     try {
       const result = await search_filter_pagination(body);
       if (result) {
-        // setAllPost(result)
+        setAllPost(result);
       }
     } catch (err) {
       console.log(err.message);

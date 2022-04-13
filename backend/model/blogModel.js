@@ -4,16 +4,16 @@ const date_Time = moment().format("MMMM Do YYYY, h:mm:ss a");
 
 const blogSchema = new mongoose.Schema(
   {
-    userEmail: String,
+    userEmail: { type: String, trim: true },
     title: { type: String, trim: true },
-    description: String,
-    imgUrl: String,
+    description: { type: String, trim: true },
+    imgUrl: { type: String, trim: true },
     like: { type: Array, default: [] },
     comment: [
       {
         commenterId: String,
         commenterEmail: String,
-        comment: String,
+        comment: { type: String, trim: true },
       },
     ],
     date_Time: { type: String, default: date_Time },

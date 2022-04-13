@@ -1,8 +1,11 @@
-const initialState = [];
-const searchBlogReducer = async (state = initialState, action) => {
+const initialState = "";
+const searchBlogReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SEARCHBLOG":
-      return action.payload;
+    case "SEARCHBLOG": {
+      const data = action.payload;
+      return data;
+    }
+
     default:
       return state;
   }
