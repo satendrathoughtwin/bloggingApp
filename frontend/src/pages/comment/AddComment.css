@@ -21,6 +21,12 @@
   scrollbar-width: thin !important;
   scroll-margin: 0px !important;
 }
+
+.addComment_commenterMainDiv {
+  display: flex;
+  justify-content: space-between;
+}
+
 .addComment_commenterDiv {
   display: flex;
   border-radius: 10px;
@@ -29,10 +35,10 @@
 }
 
 .addComment_commenterDiv img {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   padding: auto;
-  margin: 5px 0 0 5px;
+  margin: 0px 0px 0px 5px;
 }
 
 .addComment_commenterDiv a {
@@ -44,8 +50,9 @@
 }
 
 .addComment_commenterP {
-  margin-left: 45px;
-  padding-right: 5px;
+  margin: 0;
+  padding: 0;
+  margin: 0px 5px 5px 50px !important;
   color: #fff;
 }
 
@@ -57,4 +64,32 @@
   display: flex;
   justify-content: right !important;
   margin-top: 10px;
+}
+
+.addComment3Dot {
+  color: #fff;
+  margin-right: 20px;
+  cursor: pointer;
+  display: block;
+  padding: 2px 20px;
+}
+.popup-content {
+  background-color: inherit !important;
+  display: inline-flex !important;
+  justify-content: center !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.popup-content button {
+  margin: 0px;
+  margin: 3px;
+  background-color: aquamarine;
+}
+[role="tooltip"].popup-content {
+  width: 200px;
+}
+
+.popup-arrow {
+  color: aquamarine;
 }

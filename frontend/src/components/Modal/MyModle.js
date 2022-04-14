@@ -11,7 +11,7 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
   },
 };
-const MyModle = ({ MainContent, ButtonIcon, ButtonContent, id }) => {
+const MyModle = ({ MainContent, ButtonIcon, ButtonContent, id, email }) => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
   function openModal() {
     setIsOpen(true);
@@ -36,7 +36,7 @@ const MyModle = ({ MainContent, ButtonIcon, ButtonContent, id }) => {
         ariaHideApp={false}
       >
         <div>
-          <MainContent id={id} />
+          <MainContent id={id} email={email} />
         </div>
       </Modal>
     </div>

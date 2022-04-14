@@ -246,6 +246,7 @@ const disLike = async (req, res) => {
 const addComment = async (req, res) => {
   const { myProfileId, myProfileEmail, commenterId, commenterEmail, comment } =
     req.body;
+  console.log(req.body);
   let message, length;
   try {
     const myCommentListResult = await BlogModel.findOneAndUpdate(
@@ -347,7 +348,13 @@ const updateComment = async (req, res) => {
 };
 
 const deleteComment = async (req, res) => {
-  const { myProfileId, myProfileEmail, commentId, commenterId } = req.body;
+  const {
+    myProfileId,
+    myProfileEmail,
+    commentId,
+    commenterId,
+    commenterEmail,
+  } = req.body;
   let message, length;
   try {
     const myCommentListResult = await BlogModel.findOneAndUpdate(
@@ -357,7 +364,7 @@ const deleteComment = async (req, res) => {
       },
       {
         $pull: {
-          comment: { _id: commentId, commenterId },
+          comment: { _id: commentId, commenterId, commenterEmail },
         },
       },
       { new: true }

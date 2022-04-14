@@ -12,6 +12,7 @@ const blogSchema = new mongoose.Schema(
     comment: [
       {
         commenterId: String,
+        commenterImgUrl: { type: String, trim: true },
         commenterEmail: String,
         comment: { type: String, trim: true },
       },

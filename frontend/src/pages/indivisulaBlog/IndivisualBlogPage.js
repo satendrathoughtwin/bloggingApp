@@ -19,7 +19,7 @@ const IndivisualBlogPage = () => {
 
   return (
     <section className="indivisualBlogPageSection">
-      <BlogProfile BlogData ={blogData}/>
+      <BlogProfile BlogData ={blogData} blogId={blogId}/>
     </section>
   );
 };

@@ -28,7 +28,7 @@ router.patch("/blogDisLike", disLike);
 router.patch("/blog/:Id", updateBlog);
 router.patch("/blogLikeIsExist", isIN_MY_Like_List);
 router.patch("/comment", updateComment);
+router.patch("/delete_comment", deleteComment);
 
 router.delete("/blog/:Id", deleteBlog);
-router.delete("/comment", deleteComment);
 export default router;

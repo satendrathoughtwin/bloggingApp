@@ -242,7 +242,29 @@ const disLike = async (body) => {
 
 const addComment = async (body) => {
   try {
+    const result = await axios.post(`/api/comment`, body);
+    if (result) {
+      return result.data;
+    }
+  } catch (err) {
+    console.log("comment Failed", err.message);
+  }
+};
+
+const updateComment = async (body) => {
+  try {
     const result = await axios.patch(`/api/comment`, body);
+    if (result) {
+      return result.data;
+    }
+  } catch (err) {
+    console.log("comment Failed", err.message);
+  }
+};
+
+const deleteComment = async (body) => {
+  try {
+    const result = await axios.patch(`/api/delete_comment`, body);
     if (result) {
       return result.data;
     }
@@ -288,5 +310,7 @@ export {
   disLike,
   alreadyLiked,
   addComment,
+  updateComment,
+  deleteComment,
   search_filter_pagination,
 };

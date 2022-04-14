@@ -12,6 +12,7 @@ import SocialMedia from "../socialMedia.js/SocialMedia";
 import { localStorageData } from "../../services/localStorage";
 import AddComment from "../../pages/comment/AddComment";
 import Likes from "../../pages/likes/Likes";
+import { useSelector } from "react-redux";
 const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
   const navigate = useNavigate();
   const [isLike, setIsLike] = useState(false);
@@ -66,6 +67,10 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
   useEffect(() => {
     alreadyBlogLiked();
   }, [BlogData]);
+
+  
+
+
   return (
     <div className="BlogProfile">
       <div className="blogProfileHeaderDiv">
@@ -117,12 +122,14 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
           <MyModle
             MainContent={Likes}
             id={BlogData._id}
-            ButtonContent="Sapna@82, sharshti632 and  others"
+            ButtonContent={`"Sapna@82, sharshti632 and  others"`}
           />
         </div>
         <MyModle
           MainContent={AddComment}
-          ButtonContent={`${BlogData?.comment?.length} comments`}
+          id={BlogData._id}
+          email={BlogData.userEmail}
+          ButtonContent={` comments`}
         />
       </footer>
       <footer className="BlogProfileFooterButton">
@@ -142,6 +149,7 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
           <MyModle
             MainContent={AddComment}
             id={BlogData._id}
+            email={BlogData.userEmail}
             ButtonIcon={<GoCommentDiscussion />}
           />
         </button>

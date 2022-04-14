@@ -1,19 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import MyModle from "../../components/Modal/MyModle";
+import { getPostById } from "../../services/api";
 import "./Likes.css";
-const Likes = () => {
+const Likes = ({ id}) => {
+  const [showLikes, setShowLikes] = useState([]);
+  const showLikersData = async (id) => {
+    const result = await getPostById(id);
+    if (result) {
+      setShowLikes(result[0].like);
+    }
+  };
+  useEffect(() => {
+    showLikersData(id);
+  }, [id]);
   return (
     <>
       <section className="likes_Section">
         <header>Likes</header>
-        <div className="likesDiv">
-          <img
-            src="https://25hournews.com/imgs/news/3154.jpg?v=1597387286"
-            alt="commenter pic"
-          />
-          <NavLink to="/">satendrasahu822gmail.com</NavLink>
-        </div>
+        {showLikes ? (
+          showLikes.map((data, ind) => {
+            return (
+              <>
+                <div className="likesDiv" key={ind}>
+                  <img
+                    src="https://25hournews.com/imgs/news/3154.jpg?v=1597387286"
+                    alt="commenter pic"
+                  />
+                  <NavLink to={`/otherUserProfile/${data}`}>{data}</NavLink>
+                </div>
+              </>
+            );
+          })
+        ) : (
+          <h3>No likes yet</h3>
+        )}
       </section>
     </>
   );
