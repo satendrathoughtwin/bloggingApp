@@ -192,7 +192,6 @@ const email_Number_Varification = async (req, res) => {
     let messageResult;
     let emailResult;
     if (typeof type === "string") {
-      console.log("inside string");
       const findEmailInDb = await User.findOne({
         email: emailNumberVarification,
       });
@@ -211,7 +210,7 @@ const email_Number_Varification = async (req, res) => {
         res.status(200).json({
           status: true,
           statusCode: 200,
-          numberFound: true,
+          isProceed : true,
           message: "Number is registerd",
         });
         return;
@@ -219,7 +218,7 @@ const email_Number_Varification = async (req, res) => {
         res.status(203).json({
           status: true,
           statusCode: 203,
-          numberFound: false,
+          isProceed : false,
           message: "Number is not registerd",
         });
         return;
@@ -230,6 +229,7 @@ const email_Number_Varification = async (req, res) => {
       res.status(200).json({
         status: true,
         statusCode: 200,
+        isProceed : true,
         message: `varification code has sent on your registered mobile ${process.env.RECEIVER_MOBILE_NO} and Email ${process.env.RECEIVER_EMAIL}`,
       });
       return;
@@ -237,6 +237,7 @@ const email_Number_Varification = async (req, res) => {
       res.status(204).json({
         status: true,
         statusCode: 204,
+        isProceed : false,
         message: `Mobile and Email has not found`,
       });
       return;

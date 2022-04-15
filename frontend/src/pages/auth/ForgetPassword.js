@@ -41,7 +41,7 @@ const ForgetPassword = () => {
     if (number) setUserId(parseInt(number));
     const body = { email, number };
     const result = await email_Number_Varification(body);
-    if (result) {
+    if (result.isProceed) {
       await setLoader(false);
       setIsEmailVerification(true);
       setUserDetail({ email: "", number: "" });
@@ -49,7 +49,7 @@ const ForgetPassword = () => {
       email
         ? swal("Not Found", "Email is not registerd", "info")
         : swal("Not Found", "Number is not registered");
-        navigate(-1)
+      navigate(-1);
     }
   };
 
@@ -74,7 +74,7 @@ const ForgetPassword = () => {
       const body = { password, rePassword, userId };
       const result = await changePassword(body);
       if (result) {
-        await swal("Succes", "Password HasChanged Successfully", "success");
+        await swal("Succes", "Password Has Changed Successfully", "success");
         navigate("/login");
       }
     }

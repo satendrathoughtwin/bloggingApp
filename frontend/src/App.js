@@ -13,6 +13,9 @@ import ForgetPasswordPage from "./pages/auth/ForgetPassword";
 import { localStorageData } from "./services/localStorage";
 import { useDispatch } from "react-redux";
 import { setLocalStorageAction } from "./redux/action/localStorageAction";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const App = () => {
   const dispatch = useDispatch();
   useEffect(async () => {
@@ -22,6 +25,7 @@ const App = () => {
   return (
     <>
       <BrowserRouter>
+      <ToastContainer/>
         <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />} />

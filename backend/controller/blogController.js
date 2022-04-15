@@ -246,7 +246,6 @@ const disLike = async (req, res) => {
 const addComment = async (req, res) => {
   const { myProfileId, myProfileEmail, commenterId, commenterEmail, comment } =
     req.body;
-  console.log(req.body);
   let message, length;
   try {
     const myCommentListResult = await BlogModel.findOneAndUpdate(

@@ -7,7 +7,7 @@ import { GoCommentDiscussion } from "react-icons/go";
 import { MdDelete } from "react-icons/md";
 import { NavLink, useNavigate } from "react-router-dom";
 import MyModle from "../Modal/MyModle";
-import { alreadyLiked, disLike, like } from "../../services/api";
+import { alreadyLiked, disLike, getPostById, like } from "../../services/api";
 import SocialMedia from "../socialMedia.js/SocialMedia";
 import { localStorageData } from "../../services/localStorage";
 import AddComment from "../../pages/comment/AddComment";
@@ -16,7 +16,16 @@ import { useSelector } from "react-redux";
 const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
   const navigate = useNavigate();
   const [isLike, setIsLike] = useState(false);
+  const [totalLikes, setTotalLikes] = useState(0);
+  const [totalComments, setTotalComments] = useState(0);
+  const total_commets_state = useSelector(state=>state.showBlogInfoReducer)
 
+  const getBlogById = async (blogId) => {
+    const result = await getPostById(blogId);
+    if (result) {
+      setTotalLikes(result[0].like.length);
+    }
+  };
   const likeBlog = async (myProfileId, myProfileEmail) => {
     const local_Storage_Data = await localStorageData();
     try {
@@ -28,6 +37,7 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
       const result = await like(body);
       if (result.isProceed) {
         setIsLike(true);
+        getBlogById(myProfileId);
       }
     } catch (err) {}
   };
@@ -56,8 +66,13 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
       const result = await disLike(body);
       if (result.isProceed) {
         setIsLike(false);
+        getBlogById(myProfileId);
       }
     } catch (err) {}
+  };
+  const total_Comments_Likes = async (BlogData) => {
+    setTotalComments(BlogData.comment.length);
+    setTotalLikes(BlogData.like.length);
   };
 
   useEffect(() => {
@@ -66,10 +81,12 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
 
   useEffect(() => {
     alreadyBlogLiked();
+    total_Comments_Likes(BlogData);
   }, [BlogData]);
 
-  
-
+  useEffect(()=>{
+    setTotalComments(total_commets_state)
+  },[total_commets_state])
 
   return (
     <div className="BlogProfile">
@@ -122,14 +139,15 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
           <MyModle
             MainContent={Likes}
             id={BlogData._id}
-            ButtonContent={`"Sapna@82, sharshti632 and  others"`}
+            ButtonContent={`${totalLikes} Likes`}
           />
         </div>
+
         <MyModle
           MainContent={AddComment}
           id={BlogData._id}
           email={BlogData.userEmail}
-          ButtonContent={` comments`}
+          ButtonContent={`${totalComments} comments`}
         />
       </footer>
       <footer className="BlogProfileFooterButton">

@@ -139,7 +139,7 @@ const email_Number_Varification = async (body) => {
       payload
     );
     if (result) {
-      return result.data.numberFound;
+      return result.data;
     }
   } catch (err) {
     console.log("Email Send failed", err.message);

@@ -1,12 +1,11 @@
-import { getPostById } from "../../services/api";
 
-const commentInitialState = "zz";
 
-const showBlogInfoReducer =async (state = commentInitialState, action) => {
+const commentInitialState = "";
+
+const showBlogInfoReducer =(state = commentInitialState, action) => {
   switch (action.type) {
     case "TOTAL_COMMENT":
-      const result = await getPostById(action.payload);
-      return result[0].comment.length;
+      return action.payload;
     default:
       return state;
   }

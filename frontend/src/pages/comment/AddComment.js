@@ -7,7 +7,6 @@ import {
   getPostById,
   updateComment,
 } from "../../services/api";
-import { localStorageData } from "../../services/localStorage";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { AiFillEdit } from "react-icons/ai";
@@ -16,6 +15,8 @@ import "react-toastify/dist/ReactToastify.css";
 import swal from "sweetalert";
 import { useDispatch, useSelector } from "react-redux";
 import { showCommentAction } from "../../redux/action";
+import { toast } from "react-toastify";
+
 const AddComment = ({ id, email }) => {
   const [comment, setComment] = useState("");
   const [showCommentSendButton, setShowCommentSendButton] = useState(false);
@@ -31,6 +32,7 @@ const AddComment = ({ id, email }) => {
     const result = await getPostById(id);
     if (result) {
       setShowComment(result[0].comment);
+      await dispatch(showCommentAction(result[0].comment.length));
     }
   };
 
@@ -48,7 +50,7 @@ const AddComment = ({ id, email }) => {
     };
     const result = await addComment(body);
     if (result) {
-      swal("You have commented");
+      toast("You have commented");
       showCommentsData(id);
       setComment("");
     }
@@ -66,11 +68,11 @@ const AddComment = ({ id, email }) => {
 
     const result = await updateComment(body);
     if (result.isProceed) {
-      swal("comment has updated");
+      toast("comment has updated");
       showCommentsData(id);
       setComment("");
       setButtonType(true);
-    } else swal("comment hasn't updated");
+    } else toast("comment hasn't updated");
   };
 
   const editComment = async (commentId) => {
@@ -92,14 +94,13 @@ const AddComment = ({ id, email }) => {
     };
     const result = await deleteComment(body);
     if (result.isProceed) {
-      swal("comment has deleted");
+      toast("comment has deleted");
       showCommentsData(id);
-    } else swal("comment hasn't deleted");
+    } else toast("comment hasn't deleted");
   };
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      console.log("enter event");
       if (rowCount < 8) setRowCount(rowCount + 1);
     }
   };
@@ -114,10 +115,6 @@ const AddComment = ({ id, email }) => {
       setShowCommentSendButton(false);
     }
   }, [comment]);
-
-  useEffect(() => {
-    dispatch(showCommentAction(id));
-  }, [id]);
 
   return (
     <>
