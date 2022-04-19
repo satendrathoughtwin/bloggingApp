@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./AddComment.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   addComment,
   deleteComment,
@@ -18,6 +18,7 @@ import { showCommentAction } from "../../redux/action";
 import { toast } from "react-toastify";
 
 const AddComment = ({ id, email }) => {
+  const navigate = useNavigate();
   const [comment, setComment] = useState("");
   const [showCommentSendButton, setShowCommentSendButton] = useState(false);
   const [rowCount, setRowCount] = useState(3);
@@ -37,6 +38,12 @@ const AddComment = ({ id, email }) => {
   };
 
   const saveComment = async (e) => {
+    console.log(!local_Storage_State)
+    if (!local_Storage_State) {
+      swal("Login first");
+      navigate("/login");
+      return
+    }
     setComment(e.target.value);
   };
 
@@ -132,7 +139,7 @@ const AddComment = ({ id, email }) => {
           />
         </div>
         <div className="addComment_Div">
-          {showComment ? (
+          {setComment.length > 0 ? (
             showComment.map((data, ind) => {
               return (
                 <>
@@ -141,7 +148,7 @@ const AddComment = ({ id, email }) => {
                       <div className="addComment_commenterDiv">
                         <img
                           src={
-                            data.commenterImgUrl ||
+                            data.imgUrl ||
                             "https://25hournews.com/imgs/news/3154.jpg?v=1597387286"
                           }
                           alt="commenter pic"
@@ -153,7 +160,7 @@ const AddComment = ({ id, email }) => {
                         </NavLink>
                       </div>
 
-                      {local_Storage_State.email == data.commenterEmail ? (
+                      {local_Storage_State?.email == data.commenterEmail ? (
                         <Popup
                           trigger={
                             <strong className="addComment3Dot">...</strong>

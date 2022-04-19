@@ -10,7 +10,9 @@
 
 .addCommentTextArea {
   background-color: aquamarine;
-  width: 50vw;
+  margin: 0% 3%;
+  padding: 0% 3%;
+  width: 88%;
   border-radius: 10px;
   border: none;
   outline: none;
@@ -92,4 +94,13 @@
 
 .popup-arrow {
   color: aquamarine;
+}
+
+
+
+@media only screen and (max-width: 768px) {
+  .addComment_Section {
+    width: 94vw;
+    margin: 3%;
+  }
 }

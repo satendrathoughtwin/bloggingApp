@@ -179,7 +179,7 @@ const UserProfilePage = () => {
               </div>
               <div className="userProfile_Section_Content">
                 <p>Email</p>
-                <p>: {data.email}</p>
+                <p className="userProfile_Section_Email">: {data.email}</p>
               </div>
               <div className="userProfile_Section_Content">
                 <p>Profession</p>
@@ -192,8 +192,7 @@ const UserProfilePage = () => {
                 <button className="followers">
                   Following {data.following.length}
                 </button>
-                {isUserEmail !== otherProfileId && localStoreage ? (
-                  // isUserEmail !== otherProfileId ? (
+                {isUserEmail !== otherProfileId && localStoreage && otherProfileId ? (
                   isFollow ? (
                     <button
                       className="unfollow"

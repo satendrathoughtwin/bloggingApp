@@ -4,10 +4,10 @@
   width: 40vw;
 }
 
-.likes_Section header{
- background-color: #fff;
- text-align: center;
- margin-bottom: 10px;
+.likes_Section header {
+  background-color: #fff;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .likesDiv {
@@ -20,8 +20,10 @@
 }
 
 .likesDiv img {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
+  padding: auto;
+  margin: 5pxpx 0px 0px 5px;
 }
 
 .likesDiv a {
@@ -31,4 +33,11 @@
   text-align: center !important;
   justify-content: center;
   align-items: center;
+}
+
+@media only screen and (max-width: 768px) {
+  .likes_Section {
+    width: 94vw;
+    margin: 3%;
+  }
 }

@@ -77,6 +77,8 @@
 
 button {
     cursor: pointer;
+    padding: 3% 8%;
+    background-color: aquamarine;
 }
 
 .blogPage_NotLoggedInDiv{

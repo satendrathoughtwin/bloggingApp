@@ -1,7 +1,7 @@
 import axios from "axios";
 const createPost = async (body) => {
   try {
-    const result = await axios.post(`http://localhost:8000/api/blog`, body);
+    const result = await axios.post(`/api/blog`, body);
     if (result) {
       return result.data.data;
     }
@@ -12,7 +12,7 @@ const createPost = async (body) => {
 
 const getPostById = async (postId) => {
   try {
-    const result = await axios.get(`http://localhost:8000/api/blog/${postId}`);
+    const result = await axios.get(`/api/blog/${postId}`);
     if (result) {
       return result.data.data;
     }
@@ -35,7 +35,7 @@ const getAllPosts = async () => {
 const updatePostById = async (postId, body) => {
   try {
     const result = await axios.patch(
-      `http://localhost:8000/api/blog/${postId}`,
+      `/api/blog/${postId}`,
       body
     );
     if (result) {
@@ -48,7 +48,7 @@ const updatePostById = async (postId, body) => {
 const deletePostById = async (postId) => {
   try {
     const result = await axios.delete(
-      `http://localhost:8000/api/blog/${postId}`
+      `/api/blog/${postId}`
     );
     if (result) {
       return result.data.data;

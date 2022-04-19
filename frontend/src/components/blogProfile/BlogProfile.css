@@ -35,26 +35,24 @@ h2 {
   color: #fff;
   border-radius: 10px;
   padding: 1%;
+  overflow: scroll;
 }
-
-
 
 .blogProfile_Title_Button_Div {
   display: flex;
-   justify-content: space-between;
-   align-items: center;
+  justify-content: space-between;
+  align-items: center;
   margin: 0% 5%;
   height: auto;
 }
 
-.blogProfile_Button_Div{
+.blogProfile_Button_Div {
   width: 20%;
   display: flex;
   justify-content: space-between;
   text-align: center;
-  
 }
-.blogProfile_Button_Div button{
+.blogProfile_Button_Div button {
   width: 30%;
   height: 30px;
   padding: 0% !important;
@@ -67,8 +65,8 @@ h2 {
   font-size: 25px;
 }
 
-.BlogProfileFooter{
-  display:  flex;
+.BlogProfileFooter {
+  display: flex;
   justify-content: space-between;
   text-align: center;
   margin: 10px 50px;
@@ -79,19 +77,19 @@ h2 {
   text-decoration: none;
 }
 
-.BlogProfile_Footer__Span{
-  display:  flex;
+.BlogProfile_Footer__Span {
+  display: flex;
   text-align: center;
-  
+
   color: #fff;
 }
 
-.BlogProfile_Footer__Span :nth-child(1){
+.BlogProfile_Footer__Span :nth-child(1) {
   margin-right: 5px;
   font-size: 20px;
 }
 
-.BlogProfileFooterButton{
+.BlogProfileFooterButton {
   display: flex;
   justify-content: space-between;
   text-align: center;
@@ -99,12 +97,26 @@ h2 {
   font-size: 20px;
 }
 
-.BlogProfileFooterButton button{
+.BlogProfileFooterButton button {
   background-color: inherit !important;
-  border : 1px solid aquamarine;
-  color : #fff
+  border: 1px solid aquamarine;
+  color: #fff;
+  padding: 1% 5%; 
+  cursor: pointer;
 }
 
-.likeButton :nth-child(1){
+.likeButton :nth-child(1) {
   color: rgba(10, 10, 235, 0.979);
+}
+
+@media only screen and (max-width: 768px) {
+  .blogProfileHeaderDiv {
+    margin: 0;
+    padding: 0px 5px;
+    font-size: 15px;
+    word-break: break-all;
+  }
+  .blogProfile_Header__Title {
+    margin-left: 10px;
+  }
 }

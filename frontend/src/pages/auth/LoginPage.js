@@ -65,8 +65,8 @@ const LoginPage = () => {
           />
         </div>
         <div>
-          <button type="submit">Submit</button>
-          <button type="cancel">cancel</button>
+          <button type="submit">Login</button>
+          <button type="cancel" onClick={()=>navigate("/")}>cancel</button>
         </div>
       </form>
       <div>

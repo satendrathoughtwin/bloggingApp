@@ -42,6 +42,7 @@
   background-color: rgb(41, 107, 85);
   margin-bottom: 5px;
   border-radius: 10px;
+  /* word-break: break-all; */
 }
 
 .userProfile_Section_Content :hover {
@@ -74,25 +75,70 @@
   color: #fff;
   width: auto !important;
   border: 1px solid rgb(40, 110, 87) !important;
-  padding:5px 8px  !important;  
+  padding: 5px 8px !important;
 }
 
 .follow {
   background-color: blue !important;
   color: #fff;
   width: auto !important;
-  padding: 5px 8px !important; 
+  padding: 5px 8px !important;
 }
 
 .unfollow {
-  background-color:red !important;
+  background-color: red !important;
   color: #fff;
   width: auto !important;
-  padding: 5px 8px !important; 
+  padding: 5px 8px !important;
 }
 
-.userProfile_section_follow_ubfolow_div{
+.userProfile_section_follow_ubfolow_div {
   display: flex;
   justify-content: center;
   text-align: center;
+}
+
+.userProfile_Section_Email {
+  word-break: break-all;
+}
+@media only screen and (max-width: 900px) {
+  .userProfilePage {
+    width: 100vw - 20px;
+    margin: 1% 10px;
+  }
+  .userProfile_Section {
+    display: inline-block;
+    margin: 0 !important;
+    padding: 0 0 50px 0 !important;
+  }
+
+  .userProfile_Section_figure {
+    margin: 5%;
+    width: 90%;
+  }
+  .userProfile_Section_figure img {
+    padding: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+  }
+
+  .userProfile_Section_figure a {
+    margin: 0;
+    padding: 0;
+    font-size: 25px;
+  }
+  .userProfile_Section_Aside {
+    width: auto;
+    margin:7% 5% 5% 5%;
+    padding: 0;
+  }
+}
+
+
+@media only screen and (max-width: 400px) {
+  .userProfile_Section_Aside {
+    width: auto;
+    margin:15% 5% 5% 5%;
+    padding: 0;
+  }
 }

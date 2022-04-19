@@ -1,18 +1,28 @@
 .navbar {
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   color: red;
+  top: 20px !important;
 }
 
 .navbar a {
   display: inline-block;
   margin: 1ch;
+
+  margin: 0;
+  padding: 0;
   padding: 1% 3%;
   background-color: aquamarine;
-
-  /* border: 1px solid red; */
   border-radius: 10px;
+  border: none;
+  outline: none;
   text-decoration: none;
+  /* width: 200px; */
+  justify-content: center;
+  text-align: center;
+  margin: 10px;
 }
 .navbar a :hover {
   cursor: pointer;
@@ -41,4 +51,20 @@
   padding: 1% 3%;
   margin: 1ch;
   border-radius: 10px;
+}
+
+@media only screen and (max-width: 768px) {
+  .Navbar_MainDiv {
+    display: flex;
+    justify-content:center;
+    border-radius: 10px;
+    
+  }
+  .navbar {
+    display: flex;
+    justify-content: unset;
+    overflow: scroll;
+    width: 80vw;
+    border-radius: 10px;
+  }
 }

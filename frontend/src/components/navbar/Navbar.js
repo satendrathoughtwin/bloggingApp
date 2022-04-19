@@ -19,7 +19,7 @@ const Navbar = () => {
     navigate("/")
   };
   return (
-    <div>
+    <div className="Navbar_MainDiv">
       <nav className="navbar">
         <NavLink to="/">Home</NavLink>
         <NavLink to="/blog">Blog</NavLink>

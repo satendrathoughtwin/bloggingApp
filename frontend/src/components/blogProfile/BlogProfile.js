@@ -13,13 +13,16 @@ import { localStorageData } from "../../services/localStorage";
 import AddComment from "../../pages/comment/AddComment";
 import Likes from "../../pages/likes/Likes";
 import { useSelector } from "react-redux";
+import swal from "sweetalert";
 const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
   const navigate = useNavigate();
   const [isLike, setIsLike] = useState(false);
   const [totalLikes, setTotalLikes] = useState(0);
   const [totalComments, setTotalComments] = useState(0);
-  const total_commets_state = useSelector(state=>state.showBlogInfoReducer)
-
+  const total_commets_state = useSelector((state) => state.showBlogInfoReducer);
+ const local_Storage_State = useSelector(
+    (state) => state.setLocalStorageReducer
+  );
   const getBlogById = async (blogId) => {
     const result = await getPostById(blogId);
     if (result) {
@@ -27,12 +30,16 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
     }
   };
   const likeBlog = async (myProfileId, myProfileEmail) => {
-    const local_Storage_Data = await localStorageData();
+    if (!local_Storage_State) {
+      swal("Login first");
+      navigate("/login");
+      return;
+    }
     try {
       const body = {
         myProfileId,
         myProfileEmail,
-        likerProfileEmail: local_Storage_Data.email,
+        likerProfileEmail: local_Storage_State.email,
       };
       const result = await like(body);
       if (result.isProceed) {
@@ -43,11 +50,10 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
   };
 
   const alreadyBlogLiked = async () => {
-    const local_Storage_Data = await localStorageData();
     try {
       const body = {
         myProfileId: BlogData._id,
-        likerProfileEmail: local_Storage_Data.email,
+        likerProfileEmail: local_Storage_State.email,
       };
       const result = await alreadyLiked(body);
       if (result.isProceed) {
@@ -56,12 +62,16 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
     } catch (err) {}
   };
   const disLikeBlog = async (myProfileId, myProfileEmail) => {
-    const local_Storage_Data = await localStorageData();
+    if (!local_Storage_State) {
+      swal("Login first");
+      navigate("/login");
+      return;
+    }
     try {
       const body = {
         myProfileId,
         myProfileEmail,
-        likerProfileEmail: local_Storage_Data.email,
+        likerProfileEmail: local_Storage_State.email,
       };
       const result = await disLike(body);
       if (result.isProceed) {
@@ -84,9 +94,9 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
     total_Comments_Likes(BlogData);
   }, [BlogData]);
 
-  useEffect(()=>{
-    setTotalComments(total_commets_state)
-  },[total_commets_state])
+  useEffect(() => {
+    setTotalComments(total_commets_state);
+  }, [total_commets_state]);
 
   return (
     <div className="BlogProfile">
@@ -95,7 +105,7 @@ const BlogProfile = ({ BlogData, UserId, deleteBlog }) => {
           <h3>{BlogData.userEmail}</h3>
         </NavLink>
 
-        <h5>{BlogData.date_Time}</h5>
+        <h5 className="blogProfile_Header__Title">{BlogData.date_Time}</h5>
       </div>
 
       <div className="blogProfile_Title_Button_Div">

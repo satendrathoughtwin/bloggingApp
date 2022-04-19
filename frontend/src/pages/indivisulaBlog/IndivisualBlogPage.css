@@ -1,6 +1,13 @@
-.indivisualBlogPageSection{
-    width: 1005 - 300px;
-    border-radius: 10px;
-    background-color: aquamarine;
-    margin: 1% 150px;
+.indivisualBlogPageSection {
+  width: 100vw - 300px;
+  border-radius: 10px;
+  background-color: aquamarine;
+  margin: 1% 150px;
+}
+
+@media only screen and (max-width: 1100px) {
+  .indivisualBlogPageSection {
+    width: 100vw - 20px;
+    margin: 1% 10px;
+  }
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { getPostById } from "../../services/api";
 import "./Likes.css";
-const Likes = ({ id}) => {
+const Likes = ({ id }) => {
   const [showLikes, setShowLikes] = useState([]);
   const showLikersData = async (id) => {
     const result = await getPostById(id);
@@ -23,8 +23,11 @@ const Likes = ({ id}) => {
               <>
                 <div className="likesDiv" key={ind}>
                   <img
-                    src="https://25hournews.com/imgs/news/3154.jpg?v=1597387286"
-                    alt="commenter pic"
+                    src={
+                      data.imgUrl ||
+                      "https://25hournews.com/imgs/news/3154.jpg?v=1597387286"
+                    }
+                    alt="liker pic"
                   />
                   <NavLink to={`/otherUserProfile/${data}`}>{data}</NavLink>
                 </div>

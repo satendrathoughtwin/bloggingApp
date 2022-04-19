@@ -94,7 +94,7 @@ const RegisterPage = () => {
         </div>
         <div>
           <button type="submit">Submit</button>
-          <button type="cancel">cancel</button>
+          <button type="cancel" onClick={()=>navigate("/")}>Cancel</button>
         </div>
       </form>
       <div>
